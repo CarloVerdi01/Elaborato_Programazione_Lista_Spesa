@@ -18,10 +18,15 @@ public:
 
     void addProduct(std::shared_ptr<Prodotto>& p);
 
+    void removeProduct(std::shared_ptr<Prodotto>& p);
+
+    bool findProduct(std::shared_ptr<Prodotto>& p) const;
+
+
     void printList() const;
 
 private:
-    std::map<std::string, std::shared_ptr<Prodotto>> lista_della_spesa;
+    std::multimap<std::string, std::shared_ptr<Prodotto>> lista_della_spesa;
     std::string listName;
 };
 

@@ -15,6 +15,10 @@ public:
 
     void printProduct() override;
 
+    void addQuantity(int q) override{
+        productQuantity += q;
+    }
+
     void setCategory(std::string c) override{
         productCategory = c;
     }

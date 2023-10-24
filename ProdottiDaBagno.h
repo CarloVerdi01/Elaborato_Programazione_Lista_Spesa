@@ -13,7 +13,12 @@ public:
     ProdottiDaBagno(std::string name, int quantity, std::string category="Prodotti da Bagno") : Prodotto(name, quantity), productCategory(category){}
     ~ProdottiDaBagno() = default;
 
+    void addQuantity(int q) override{
+        productQuantity += q;
+    }
+
     void printProduct() override;
+
 
     void setCategory(std::string c) override{
         productCategory = c;

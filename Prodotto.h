@@ -11,11 +11,20 @@
 class Prodotto {
 public:
     explicit Prodotto(std::string name, int quantity) : productName(name), productQuantity(quantity) {};
+
     virtual ~Prodotto() = default;
 
     virtual void printProduct() = 0;
+
     virtual void setCategory(std::string c) = 0;
+
     virtual std::string getCategory() const = 0;
+
+    virtual void addQuantity(int q) = 0;
+
+    bool operator ==(const Prodotto& other) const{
+        return (productName == other.productName);
+    }
 
     void setName(std::string n){
         productName = n;
@@ -37,7 +46,6 @@ public:
 protected:
     std::string productName;
     int productQuantity;
-
 };
 
 
