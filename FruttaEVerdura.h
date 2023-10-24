@@ -10,7 +10,7 @@
 
 class FruttaEVerdura : public Prodotto{
 public:
-    FruttaEVerdura(std::string name, int quantity, std::string category="Frutta e Verdura") : Prodotto(name, quantity), productCategory(category){}
+    FruttaEVerdura(std::string name, int quantity = 0, std::string category="Frutta e Verdura") : Prodotto(name, quantity), productCategory(category){}
     ~FruttaEVerdura() = default;
     void printProduct() override;
 

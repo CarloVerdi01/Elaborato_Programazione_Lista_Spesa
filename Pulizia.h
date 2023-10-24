@@ -10,7 +10,7 @@
 
 class Pulizia : public Prodotto{
 public:
-    Pulizia(std::string name, int quantity, std::string category="Pulizia") : Prodotto(name, quantity), productCategory(category){}
+    Pulizia(std::string name, int quantity = 0, std::string category="Pulizia") : Prodotto(name, quantity), productCategory(category){}
     ~Pulizia() = default;
     void printProduct() override;
 

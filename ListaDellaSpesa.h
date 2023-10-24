@@ -16,14 +16,21 @@ public:
         lista_della_spesa.clear();
     }
 
-    void addProduct(std::shared_ptr<Prodotto>& p);
+    void addProduct(std::shared_ptr<Prodotto>& p, int quantity);
 
     void removeProduct(std::shared_ptr<Prodotto>& p);
 
     bool findProduct(std::shared_ptr<Prodotto>& p) const;
 
-
     void printList() const;
+
+    std::string getListName() const{
+        return listName;
+    }
+
+    void setListName(std::string n) {
+        listName = n;
+    }
 
 private:
     std::multimap<std::string, std::shared_ptr<Prodotto>> lista_della_spesa;

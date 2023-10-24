@@ -10,7 +10,7 @@
 
 class Forno : public Prodotto{
 public:
-    Forno(std::string name, int quantity, std::string category="Forno") : Prodotto(name, quantity), productCategory(category) {};
+    Forno(std::string name, int quantity = 0, std::string category="Forno") : Prodotto(name, quantity), productCategory(category) {};
     ~Forno() = default;
     void printProduct() override;
 

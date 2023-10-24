@@ -10,7 +10,7 @@
 
 class Bevande : public Prodotto{
 public:
-    Bevande(std::string name, int quantity, std::string category= "Bevande") : Prodotto(name, quantity), productCategory(category){}
+    Bevande(std::string name, int quantity = 0, std::string category= "Bevande") : Prodotto(name, quantity), productCategory(category){}
     ~Bevande() = default;
 
     void printProduct() override;

@@ -6,17 +6,19 @@
 #include "ListaDellaSpesa.h"
 #include "Prodotto.h"
 
-void ListaDellaSpesa::addProduct(std::shared_ptr<Prodotto>& p) {
+void ListaDellaSpesa::addProduct(std::shared_ptr<Prodotto>& p, int quantity) {
     bool found = false;
     for (auto iter : lista_della_spesa){
         if (iter.second->getName() == p->getName()){
-            iter.second->addQuantity(p->getQuantity());
+            iter.second->addQuantity(quantity);
             found = true;
             break;
         }
     }
-    if (!found)
+    if (!found) {
+        p->setQuantity(quantity);
         lista_della_spesa.insert(std::make_pair(p->getCategory(), p));
+    }
 }
 
 bool ListaDellaSpesa::findProduct(std::shared_ptr<Prodotto>& p) const{

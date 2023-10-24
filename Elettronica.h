@@ -10,7 +10,7 @@
 
 class Elettronica : public Prodotto{
 public:
-    Elettronica(std::string name, int quantity, std::string category = "Elettroncia") : Prodotto(name, quantity), productCategory(category){}
+    Elettronica(std::string name, int quantity = 0, std::string category = "Elettroncia") : Prodotto(name, quantity), productCategory(category){}
     ~Elettronica() = default;
     void printProduct() override;
 

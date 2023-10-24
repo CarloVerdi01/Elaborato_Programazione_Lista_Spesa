@@ -10,7 +10,7 @@
 
 class Macelleria : public Prodotto{
 public:
-    Macelleria(std::string name, int quantity, std::string category = "Macelleria") : Prodotto(name, quantity), productCategory(category){}
+    Macelleria(std::string name, int quantity = 0, std::string category = "Macelleria") : Prodotto(name, quantity), productCategory(category){}
     ~Macelleria() = default;
     void printProduct() override;
 
