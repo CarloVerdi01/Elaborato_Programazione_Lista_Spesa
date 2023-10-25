@@ -6,5 +6,5 @@
 #include "Altro.h"
 
 void Altro::printProduct() {
-    std::cout << "Prodotto: " << productName << " - Quantità: " << productQuantity << " - Categoria: " << productCategory << std::endl;
+    std::cout << "Prodotto: " << productName << " - Quantità: " << productQuantity << " - Prezzo: " << productPrice << "€ - Categoria: " << productCategory << std::endl;
 }

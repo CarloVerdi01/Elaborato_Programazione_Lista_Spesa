@@ -10,13 +10,18 @@
 
 class Abbigliamento : public Prodotto{
 public:
-    Abbigliamento(std::string name, int quantity = 0, std::string category="Abbigliamento") : Prodotto(name, quantity), productCategory(category){}
+    Abbigliamento(std::string name, float price, int quantity = 0, std::string category="Abbigliamento") : Prodotto(name, price, quantity), productCategory(category){}
     ~Abbigliamento() = default;
     void printProduct() override;
 
     void addQuantity(int q) override{
         productQuantity += q;
     }
+
+    void removeQuantity(int q) override{
+        productQuantity -= q;
+    };
+
 
 
     void setCategory(std::string c) override{
@@ -41,6 +46,14 @@ public:
 
     int getQuantity() const{
         return productQuantity;
+    }
+
+    void setPrice(float p){
+        productPrice = p;
+    }
+
+    float getPrice() const{
+        return productPrice;
     }
 
 

@@ -10,13 +10,17 @@
 
 class Macelleria : public Prodotto{
 public:
-    Macelleria(std::string name, int quantity = 0, std::string category = "Macelleria") : Prodotto(name, quantity), productCategory(category){}
+    Macelleria(std::string name, float price, int quantity = 0, std::string category = "Macelleria") : Prodotto(name, price, quantity), productCategory(category){}
     ~Macelleria() = default;
     void printProduct() override;
 
     void addQuantity(int q) override{
         productQuantity += q;
     }
+
+    void removeQuantity(int q) override{
+        productQuantity -= q;
+    };
 
     void setCategory(std::string c) override{
         productCategory = c;
@@ -41,6 +45,15 @@ public:
     int getQuantity() const{
         return productQuantity;
     }
+
+    void setPrice(float p){
+        productPrice = p;
+    }
+
+    float getPrice() const{
+        return productPrice;
+    }
+
 
 
 private:

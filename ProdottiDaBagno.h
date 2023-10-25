@@ -10,12 +10,16 @@
 
 class ProdottiDaBagno : public Prodotto{
 public:
-    ProdottiDaBagno(std::string name, int quantity = 0, std::string category="Prodotti da Bagno") : Prodotto(name, quantity), productCategory(category){}
+    ProdottiDaBagno(std::string name, float price, int quantity = 0, std::string category="Prodotti da Bagno") : Prodotto(name, price, quantity), productCategory(category){}
     ~ProdottiDaBagno() = default;
 
     void addQuantity(int q) override{
         productQuantity += q;
     }
+
+    void removeQuantity(int q) override{
+        productQuantity -= q;
+    };
 
     void printProduct() override;
 

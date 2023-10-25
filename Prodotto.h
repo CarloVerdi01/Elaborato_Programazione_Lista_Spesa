@@ -10,7 +10,9 @@
 
 class Prodotto {
 public:
-    explicit Prodotto(std::string name, int quantity) : productName(name), productQuantity(quantity) {};
+    Prodotto(std::string name, float price, int quantity) : productName(name), productPrice(price), productQuantity(quantity) {};
+
+    Prodotto(const Prodotto& other) : productName(other.productName), productPrice(other.productPrice), productQuantity(other.productQuantity) {}
 
     virtual ~Prodotto() = default;
 
@@ -21,6 +23,8 @@ public:
     virtual std::string getCategory() const = 0;
 
     virtual void addQuantity(int q) = 0;
+
+    virtual void removeQuantity(int q) = 0;
 
     bool operator ==(const Prodotto& other) const{
         return (productName == other.productName);
@@ -42,10 +46,19 @@ public:
         return productQuantity;
     }
 
+    void setPrice(float p){
+        productPrice = p;
+    }
+
+    float getPrice() const{
+        return productPrice;
+    }
+
 
 protected:
     std::string productName;
     int productQuantity;
+    float productPrice;
 };
 
 

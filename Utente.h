@@ -15,17 +15,25 @@ public:
 
     ~Utente() {};
 
-    ListaDellaSpesa creaListaDellaSpesa(std::string name);
+    ListaDellaSpesa& creaListaDellaSpesa(std::string name);
 
     //void addProductToList(std::string n, std::shared_ptr<Prodotto>& p);
 
     void addProductToList(ListaDellaSpesa& ls, std::shared_ptr<Prodotto>& p, int quantity);
 
-    void printList(const ListaDellaSpesa& ls);
+    void printOneShoppingList(const ListaDellaSpesa& ls);
 
     void removeProductFromList(ListaDellaSpesa& ls, std::shared_ptr<Prodotto> &p);
 
-    void getShoopingLists() const;
+    void addNewList(const ListaDellaSpesa& ls);
+
+    void reduceProductQuantity(ListaDellaSpesa& ls, std::shared_ptr<Prodotto> &p, int q);
+
+    void getShoppingLists() const;
+
+    void printAllShoppingLists() const;
+
+    void shareList(Utente& u, const ListaDellaSpesa& ls);
 
 
     void setName(std::string n){

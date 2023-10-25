@@ -20,6 +20,8 @@ public:
 
     void removeProduct(std::shared_ptr<Prodotto>& p);
 
+    void reduceProductQuantity(std::shared_ptr<Prodotto>& p, int q);
+
     bool findProduct(std::shared_ptr<Prodotto>& p) const;
 
     void printList() const;
