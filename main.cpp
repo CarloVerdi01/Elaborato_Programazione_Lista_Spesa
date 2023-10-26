@@ -22,6 +22,7 @@ int main() {
     std::shared_ptr<Prodotto> baguette = std::make_shared<Forno>("Baguette", 1.20);
     std::shared_ptr<Prodotto> latte = std::make_shared<Bevande>("Latte", 1.25);
     std::shared_ptr<Prodotto> dentifricio = std::make_shared<ProdottiDaBagno>("Dentifricio", 2.50);
+    std::shared_ptr<Prodotto> televisore = std::make_shared<Elettronica>("Telelvisore", 249.99);
 
 
 
@@ -53,63 +54,42 @@ int main() {
 
 
 
+
     Utente carlo("Carlo", "Verdi");
+    //std::cout << carlo.getUser() << std::endl;
     Utente paolo("Paolo", "Verdi");
-    ListaDellaSpesa& spesa_nonna = carlo.creaListaDellaSpesa("Spesa Nonna");
+
+    ListaDellaSpesa& spesa_nonna = carlo.creaListaDellaSpesa("Spesa Nonna", carlo.getUser());
     carlo.addProductToList(spesa_nonna, coca_cola, 2);
     carlo.addProductToList(spesa_nonna, bistecca, 1);
     carlo.addProductToList(spesa_nonna, sapone, 5);
     carlo.reduceProductQuantity(spesa_nonna, coca_cola, 1);
-    //carlo.removeProductFromList(spesa_nonna, coca_cola);
-    carlo.printOneShoppingList(spesa_nonna);
+    carlo.removeProductFromList(spesa_nonna, bistecca);
+    carlo.addProductToList(spesa_nonna, televisore, 1);
+    carlo.printAllShoppingLists();
     std::cout << " " << std::endl;
-
-
-    ListaDellaSpesa& spesa_casa = carlo.creaListaDellaSpesa("Spesa per casa");
-    carlo.addProductToList(spesa_casa, sapone, 3);
-    carlo.addProductToList(spesa_casa, baguette, 2);
-    carlo.addProductToList(spesa_casa, dentifricio, 5);
-    carlo.printOneShoppingList(spesa_casa);
-
-    ListaDellaSpesa& spesa_zia = carlo.creaListaDellaSpesa("Spesa per la zia");
-
-
-
-
-
+    //carlo.printListOwner(spesa_nonna);
     std::cout << " " << std::endl;
+    //carlo.printListSharedUsers(spesa_nonna);
+
+    carlo.shareList(spesa_nonna, paolo);
+
+    //carlo.printListSharedUsers(spesa_nonna);
+
+    paolo.printAllShoppingLists();
+
     carlo.printAllShoppingLists();
 
+    paolo.addProductToList(spesa_nonna, dentifricio, 1);
 
+    carlo.printAllShoppingLists();
 
-    /*
-    ListaDellaSpesa spesa_zia = carlo.creaListaDellaSpesa("Spesa Zia");
-    carlo.addProductToList(spesa_zia, coca_cola, 10);
-    paolo.addProductToList(spesa_zia, baguette, 2);
-    //carlo.printList(spesa_zia);
-
-    std::cout << " " << std::endl;
-
-    ListaDellaSpesa spesa_università = paolo.creaListaDellaSpesa("Spesa Università");
-
-    paolo.addProductToList(spesa_università, coca_cola, 1);
-    paolo.addProductToList(spesa_università, latte, 2);
-    paolo.addProductToList(spesa_università, sapone, 1);
-    paolo.addProductToList(spesa_università, dentifricio, 3);
-
-    //paolo.printAllShoppingLists();
-
-    //carlo.printShoppingLists();
-
-    //carlo.printAllShoppingLists();
-
-    //carlo.shareList(paolo, spesa_zia);
-
-    //paolo.printShoppingLists();
-    */
+    paolo.printAllShoppingLists();
 
 
 
+//TODO: costruire il pattern observer in modo che,  quando un utente che condivide la lista con chi l'ha creata, effettua
+//una modifca sulla lista (visto che viene moficata solo quella del creatore) aggiorni anche le listye condivise)
 
 
 }

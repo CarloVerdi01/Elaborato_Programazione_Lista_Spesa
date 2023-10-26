@@ -5,8 +5,9 @@
 #include <iostream>
 #include "Utente.h"
 
-ListaDellaSpesa& Utente::creaListaDellaSpesa(std::string name) {
-    ListaDellaSpesa nuovaLista(name);
+
+ListaDellaSpesa& Utente::creaListaDellaSpesa(std::string name, std::string owner ) {
+    ListaDellaSpesa nuovaLista(name, owner);
     listeSpesa.push_back(nuovaLista);
     return listeSpesa.back();
 }
@@ -21,7 +22,28 @@ ListaDellaSpesa& Utente::creaListaDellaSpesa(std::string name) {
 */
 
 void Utente::addProductToList(ListaDellaSpesa& ls, std::shared_ptr<Prodotto> &p, int quantity) {
-    ls.addProduct(p, quantity);
+    bool found = false;
+    /*for (auto iter : listeSpesa){
+        if (iter.getListName() == ls.getListName()){
+            ls.addProduct(p, quantity);
+            found = true;
+            break;
+        }
+    }
+     */
+    if (user == ls.getOwner()){
+        found = true;
+        ls.addProduct(p, quantity);
+    } else{
+        found = ls.isSharedUser(user);
+        if (found){
+            ls.addProduct(p, quantity);
+        }
+    }
+    if (!found){
+        std::cout << userName << " non può aggiungere prodotti alla lista '" << ls.getListName() << "' perchè non condivisa con "<< user  << std::endl;
+    }
+
 }
 
 void Utente::printOneShoppingList(const ListaDellaSpesa& ls) {
@@ -50,21 +72,26 @@ void Utente::getShoppingLists() const {
     }
 }
 
-void Utente::addNewList(const ListaDellaSpesa &ls) {
-    listeSpesa.push_back(ls);
-}
 
 void Utente::reduceProductQuantity(ListaDellaSpesa &ls, std::shared_ptr<Prodotto> &p, int q) {
     ls.reduceProductQuantity(p, q);
 }
 
-void Utente::shareList(Utente &u, const ListaDellaSpesa& ls) {
-    u.addNewList(ls);
-}
 
 void Utente::printAllShoppingLists() const{
+    std::cout << "Liste spese " << userName << ":" <<std::endl;
     for (auto iter : listeSpesa) {
         iter.printList();
         std::cout << " " << std::endl;
     }
+}
+
+void Utente::shareList(ListaDellaSpesa& ls, Utente& u) {
+    ls.shareList(u.user);
+    ListaDellaSpesa copiaLista = ls;
+    u.addNewList(copiaLista);
+}
+
+void Utente::addNewList(ListaDellaSpesa &ls) {
+    listeSpesa.push_back(ls);
 }

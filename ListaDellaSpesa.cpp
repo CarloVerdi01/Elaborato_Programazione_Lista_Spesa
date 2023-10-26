@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include "Utente.h"
 #include "ListaDellaSpesa.h"
 #include "Prodotto.h"
 #include "ProdottiDaBagno.h"
@@ -108,3 +109,6 @@ void ListaDellaSpesa::reduceProductQuantity(std::shared_ptr<Prodotto> &p, int q)
     }
 }
 
+void ListaDellaSpesa::shareList(std::string user) {
+    utentiCondivisi.push_back(user);
+}
