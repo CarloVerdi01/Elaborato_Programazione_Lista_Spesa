@@ -6,15 +6,16 @@
 #define PROVA_ELABORATO_PROGRAMAZIONE_LISTA_SPESA_OBSERVER_H
 
 
+#include "Prodotto.h"
+
 class Observer {
 public:
     virtual ~Observer() {};
 
-    virtual void attach() = 0;
-    virtual void detach() = 0;
-    virtual void update() = 0;
+    virtual void updateAdd(std::string ls, std::shared_ptr<Prodotto> p, int q) = 0;
 
-private:
+
+
 
 
 };

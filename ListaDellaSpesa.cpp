@@ -55,8 +55,10 @@ void ListaDellaSpesa::addProduct(std::shared_ptr<Prodotto>& p, int quantity) {
         if (copia) {
             copia->setQuantity(quantity);
             lista_della_spesa.insert(std::make_pair(copia->getCategory(), copia));
+
         }
     }
+    notifyAdd(listName, p , quantity);
 }
 
 bool ListaDellaSpesa::findProduct(std::shared_ptr<Prodotto>& p) const{
@@ -109,6 +111,27 @@ void ListaDellaSpesa::reduceProductQuantity(std::shared_ptr<Prodotto> &p, int q)
     }
 }
 
-void ListaDellaSpesa::shareList(std::string user) {
+void ListaDellaSpesa::shareList(Observer* o, std::string user) {
     utentiCondivisi.push_back(user);
+    registerObserver(o);
+
+
 }
+
+void ListaDellaSpesa::printListSharedUsers() {
+        printListOwner();
+        std::cout << "Lista " << listName << " condivisa con: " << std::endl;
+        for (auto iter : utentiCondivisi){
+            std::cout << iter << std::endl;
+        }
+        std::cout << " " << std::endl;
+}
+
+bool ListaDellaSpesa::isSharedUser(std::string u) {
+    for (auto iter: utentiCondivisi){
+        if ( iter == u)
+            return true;
+    }
+    return false;
+}
+

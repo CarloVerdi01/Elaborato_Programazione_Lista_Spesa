@@ -12,25 +12,9 @@ ListaDellaSpesa& Utente::creaListaDellaSpesa(std::string name, std::string owner
     return listeSpesa.back();
 }
 
-/*void Utente::addProductToList(std::string n, std::shared_ptr<Prodotto> &p) {
-    for (auto iter : listeSpesa){
-        if (iter.getListName() == n){
-            iter.addProduct(p);
-        }
-    }
-}
-*/
 
 void Utente::addProductToList(ListaDellaSpesa& ls, std::shared_ptr<Prodotto> &p, int quantity) {
     bool found = false;
-    /*for (auto iter : listeSpesa){
-        if (iter.getListName() == ls.getListName()){
-            ls.addProduct(p, quantity);
-            found = true;
-            break;
-        }
-    }
-     */
     if (user == ls.getOwner()){
         found = true;
         ls.addProduct(p, quantity);
@@ -45,6 +29,41 @@ void Utente::addProductToList(ListaDellaSpesa& ls, std::shared_ptr<Prodotto> &p,
     }
 
 }
+
+void Utente::addProductToListByName(std::string n, std::shared_ptr<Prodotto> &p, int quantity) {
+    bool found = false;
+    bool usable = false;
+    for (auto iter = listeSpesa.begin(); iter != listeSpesa.end(); ++iter) {
+        if (iter->getListName() == n) {
+            found = true;
+            if (user == iter->getOwner()) {
+                iter->addProduct(p, quantity);
+            } else {
+                usable = iter->isSharedUser(user);
+                if (found) {
+                    iter->addProduct(p, quantity);
+                }
+
+            } break;
+        }
+    }
+    /*for (auto iter: listeSpesa) {
+        if (iter.getListName() == n) {
+            if (user == iter.getOwner()) {
+                found = true;
+                iter.addProduct(p, quantity);
+            } else {
+                found = iter.isSharedUser(user);
+                if (found) {
+                    iter.addProduct(p, quantity);
+                }
+            }*/
+            if (!found) {
+                std::cout << userName << " non può aggiungere prodotti alla lista '" << n
+                          << "' perchè non condivisa con " << user << std::endl;
+            }
+
+        }
 
 void Utente::printOneShoppingList(const ListaDellaSpesa& ls) {
     bool found = false;
@@ -87,7 +106,7 @@ void Utente::printAllShoppingLists() const{
 }
 
 void Utente::shareList(ListaDellaSpesa& ls, Utente& u) {
-    ls.shareList(u.user);
+    ls.shareList(&u, u.user);
     ListaDellaSpesa copiaLista = ls;
     u.addNewList(copiaLista);
 }
@@ -95,3 +114,4 @@ void Utente::shareList(ListaDellaSpesa& ls, Utente& u) {
 void Utente::addNewList(ListaDellaSpesa &ls) {
     listeSpesa.push_back(ls);
 }
+

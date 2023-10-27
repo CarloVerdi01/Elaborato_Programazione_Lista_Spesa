@@ -9,10 +9,11 @@
 #include <map>
 #include <list>
 #include "Prodotto.h"
+#include "Subject.h"
+#include "Observer.h"
 
 
-
-class ListaDellaSpesa {
+class ListaDellaSpesa : public Subject{
 public:
     ListaDellaSpesa(std::string name, std::string owner) : listName(name), userOwner(owner){}
 
@@ -37,31 +38,33 @@ public:
 
     void printList() const;
 
-    void shareList(std::string user);
+    void shareList(Observer* o, std::string user);
+
+    void notifyAdd(std::string ls, std::shared_ptr<Prodotto> p, int q) override{
+        for (auto iter = observers.begin(); iter != observers.end(); ++iter) {
+            (*iter)->updateAdd(ls, p, q);
+        }
+    }
+
+    void registerObserver(Observer* o) override{
+        observers.push_back(o);
+    }
+
+    void removeObserver(Observer* o) override{
+        observers.remove(o);
+    }
 
     void printListOwner(){
         std::cout << "Creatore lista " << listName << ": " << userOwner << std::endl;
     }
 
-    void printListSharedUsers() {
-        printListOwner();
-        std::cout << "Lista " << listName << " condivisa con: " << std::endl;
-        for (auto iter : utentiCondivisi){
-            std::cout << iter << std::endl;
-        }
-    }
+    void printListSharedUsers();
 
     std::list<std::string> getSharedUsers() const{
         return utentiCondivisi;
     }
 
-    bool isSharedUser(std::string u){
-        for (auto iter: utentiCondivisi){
-            if ( iter == u)
-                return true;
-        }
-        return false;
-    }
+    bool isSharedUser(std::string u);
 
     void setOwner(std::string o) {
         userOwner = o;
@@ -87,6 +90,7 @@ private:
     std::string listName;
     std::string userOwner;
     std::list<std::string> utentiCondivisi;
+    std::list<Observer*> observers;
 
 };
 

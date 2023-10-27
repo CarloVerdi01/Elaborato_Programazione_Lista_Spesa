@@ -13,9 +13,9 @@ class Subject {
 public:
     virtual ~Subject() {};
 
-    virtual void registerObserver(std::unique_ptr<Observer> o) = 0;
-    virtual void removeObserver(std::unique_ptr<Observer> o) = 0;
-    virtual void notify() = 0;
+    virtual void registerObserver(Observer* o) = 0;
+    virtual void removeObserver(Observer* o) = 0;
+    virtual void notifyAdd(std::string ls, std::shared_ptr<Prodotto> p, int q) = 0;
 };
 
 

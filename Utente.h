@@ -5,11 +5,12 @@
 #ifndef PROVA_ELABORATO_PROGRAMAZIONE_LISTA_SPESA_UTENTE_H
 #define PROVA_ELABORATO_PROGRAMAZIONE_LISTA_SPESA_UTENTE_H
 
+#include "Observer.h"
 #include "ListaDellaSpesa.h"
 #include <string>
 #include <list>
 
-class Utente {
+class Utente : public Observer{
 public:
     Utente(std::string name, std::string surname) : userName(name), userSurname(surname) {
         user = userName + " " + userSurname;
@@ -23,6 +24,8 @@ public:
 
     void addProductToList(ListaDellaSpesa& ls, std::shared_ptr<Prodotto>& p, int quantity);
 
+    void addProductToListByName(std::string n, std::shared_ptr<Prodotto>& p, int quantity);
+
     void addNewList(ListaDellaSpesa& ls);
 
     void printOneShoppingList(const ListaDellaSpesa& ls);
@@ -34,6 +37,11 @@ public:
     void getShoppingLists() const;
 
     void printAllShoppingLists() const;
+
+    void updateAdd(std::string ls, std::shared_ptr<Prodotto> p, int q) override{
+        addProductToListByName(ls, p, q );
+    }
+
 
     void shareList(ListaDellaSpesa& ls, Utente& u );
 
@@ -78,6 +86,9 @@ public:
         userName = n;
         userSurname = n;
     }
+
+
+
 
 private:
     std::string user;

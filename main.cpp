@@ -66,7 +66,7 @@ int main() {
     carlo.reduceProductQuantity(spesa_nonna, coca_cola, 1);
     carlo.removeProductFromList(spesa_nonna, bistecca);
     carlo.addProductToList(spesa_nonna, televisore, 1);
-    carlo.printAllShoppingLists();
+    //carlo.printAllShoppingLists();
     std::cout << " " << std::endl;
     //carlo.printListOwner(spesa_nonna);
     std::cout << " " << std::endl;
@@ -74,22 +74,39 @@ int main() {
 
     carlo.shareList(spesa_nonna, paolo);
 
+
+
+
     //carlo.printListSharedUsers(spesa_nonna);
 
+
     paolo.printAllShoppingLists();
+
 
     carlo.printAllShoppingLists();
 
+
+    carlo.addProductToList(spesa_nonna, bistecca, 3);
     paolo.addProductToList(spesa_nonna, dentifricio, 1);
 
+    carlo.addProductToList(spesa_nonna, latte, 10);
+
+    paolo.addProductToList(spesa_nonna, latte, 2);
+
+
+
+    //carlo.printListSharedUsers(spesa_nonna);
+
+
+
     carlo.printAllShoppingLists();
 
     paolo.printAllShoppingLists();
 
 
 
-//TODO: costruire il pattern observer in modo che,  quando un utente che condivide la lista con chi l'ha creata, effettua
-//una modifca sulla lista (visto che viene moficata solo quella del creatore) aggiorni anche le listye condivise)
+
+
 
 
 }
