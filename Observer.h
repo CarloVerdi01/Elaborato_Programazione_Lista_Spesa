@@ -13,6 +13,8 @@ public:
     virtual ~Observer() {};
 
     virtual void updateAdd(std::string ls, std::shared_ptr<Prodotto> p, int q) = 0;
+    virtual void updateRemove(std::string ls, std::shared_ptr<Prodotto> p) = 0;
+    virtual void updateDecrement(std::string ls, std::shared_ptr<Prodotto> p, int q) = 0;
 
 
 

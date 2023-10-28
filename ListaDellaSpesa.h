@@ -46,6 +46,18 @@ public:
         }
     }
 
+    void notifyRemove(std::string ls, std::shared_ptr<Prodotto> p) override{
+        for (auto iter = observers.begin(); iter != observers.end(); ++iter) {
+            (*iter)->updateRemove(ls, p);
+        }
+    }
+
+    void notifyDecrement(std::string ls, std::shared_ptr<Prodotto> p, int q) override{
+        for (auto iter = observers.begin(); iter != observers.end(); ++iter) {
+            (*iter)->updateDecrement(ls, p, q);
+        }
+    }
+
     void registerObserver(Observer* o) override{
         observers.push_back(o);
     }

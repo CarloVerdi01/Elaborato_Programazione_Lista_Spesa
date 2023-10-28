@@ -74,13 +74,19 @@ bool ListaDellaSpesa::findProduct(std::shared_ptr<Prodotto>& p) const{
 
 
 void ListaDellaSpesa::removeProduct(std::shared_ptr<Prodotto> &p) {
+    bool found = false;
     for (auto iter = lista_della_spesa.begin(); iter != lista_della_spesa.end();) {
         if (iter->second->getName() == p->getName()) {
+            found = true;
             lista_della_spesa.erase(iter);
+            notifyRemove(listName, p);
             break;
         } else {
             ++iter;
         }
+    }
+    if (!found){
+        std::cout << "Prodotto non presente nella lista!" << std::endl;
     }
 }
 
@@ -109,6 +115,7 @@ void ListaDellaSpesa::reduceProductQuantity(std::shared_ptr<Prodotto> &p, int q)
             ++iter;
         }
     }
+    notifyDecrement(listName, p, q);
 }
 
 void ListaDellaSpesa::shareList(Observer* o, std::string user) {

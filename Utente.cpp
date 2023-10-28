@@ -47,23 +47,61 @@ void Utente::addProductToListByName(std::string n, std::shared_ptr<Prodotto> &p,
             } break;
         }
     }
-    /*for (auto iter: listeSpesa) {
-        if (iter.getListName() == n) {
-            if (user == iter.getOwner()) {
-                found = true;
-                iter.addProduct(p, quantity);
-            } else {
-                found = iter.isSharedUser(user);
-                if (found) {
-                    iter.addProduct(p, quantity);
-                }
-            }*/
-            if (!found) {
-                std::cout << userName << " non può aggiungere prodotti alla lista '" << n
-                          << "' perchè non condivisa con " << user << std::endl;
-            }
+    if (!found) {
+        std::cout << userName << " non può aggiungere prodotti alla lista '" << n
+        << "' perchè non condivisa con " << user << std::endl;
+    }
 
+}
+
+void Utente::removeProductFromListByName(std::string n, std::shared_ptr<Prodotto> &p) {
+    bool found = false;
+    bool usable = false;
+    for (auto iter = listeSpesa.begin(); iter != listeSpesa.end(); ++iter) {
+        if (iter->getListName() == n) {
+            found = true;
+            if (user == iter->getOwner()) {
+                iter->removeProduct(p);
+            } else {
+                usable = iter->isSharedUser(user);
+                if (found) {
+                    iter->removeProduct(p);
+                }
+
+            } break;
         }
+    }
+    if (!found) {
+        std::cout << userName << " non può rimuovere prodotti dalla lista '" << n
+                  << "' perchè non condivisa con " << user << std::endl;
+    }
+
+}
+
+void Utente::reduceProductFromListByName(std::string n, std::shared_ptr<Prodotto> &p, int quantity) {
+    bool found = false;
+    bool usable = false;
+    for (auto iter = listeSpesa.begin(); iter != listeSpesa.end(); ++iter) {
+        if (iter->getListName() == n) {
+            found = true;
+            if (user == iter->getOwner()) {
+                iter->reduceProductQuantity(p, quantity);
+            } else {
+                usable = iter->isSharedUser(user);
+                if (found) {
+                    iter->reduceProductQuantity(p, quantity);
+                }
+
+            } break;
+        }
+    }
+    if (!found) {
+        std::cout << userName << " non può ridurre la quantità di un prodotto dalla lista '" << n
+                  << "' perchè non condivisa con " << user << std::endl;
+    }
+
+}
+
 
 void Utente::printOneShoppingList(const ListaDellaSpesa& ls) {
     bool found = false;

@@ -16,6 +16,8 @@ public:
     virtual void registerObserver(Observer* o) = 0;
     virtual void removeObserver(Observer* o) = 0;
     virtual void notifyAdd(std::string ls, std::shared_ptr<Prodotto> p, int q) = 0;
+    virtual void notifyRemove(std::string ls, std::shared_ptr<Prodotto> p) = 0;
+    virtual void notifyDecrement(std::string ls, std::shared_ptr<Prodotto> p, int q) = 0;
 };
 
 

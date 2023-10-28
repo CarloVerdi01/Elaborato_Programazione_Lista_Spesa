@@ -23,6 +23,7 @@ int main() {
     std::shared_ptr<Prodotto> latte = std::make_shared<Bevande>("Latte", 1.25);
     std::shared_ptr<Prodotto> dentifricio = std::make_shared<ProdottiDaBagno>("Dentifricio", 2.50);
     std::shared_ptr<Prodotto> televisore = std::make_shared<Elettronica>("Telelvisore", 249.99);
+    std::shared_ptr<Prodotto> salmone = std::make_shared<Pescheria>("Fileto di Salmone", 10.00);
 
 
 
@@ -59,6 +60,8 @@ int main() {
     //std::cout << carlo.getUser() << std::endl;
     Utente paolo("Paolo", "Verdi");
 
+    Utente cecilia("Cecilia", "Verdi");
+
     ListaDellaSpesa& spesa_nonna = carlo.creaListaDellaSpesa("Spesa Nonna", carlo.getUser());
     carlo.addProductToList(spesa_nonna, coca_cola, 2);
     carlo.addProductToList(spesa_nonna, bistecca, 1);
@@ -73,21 +76,35 @@ int main() {
     //carlo.printListSharedUsers(spesa_nonna);
 
     carlo.shareList(spesa_nonna, paolo);
+    carlo.shareList(spesa_nonna, cecilia);
+
+    ListaDellaSpesa& spesa_casa = paolo.creaListaDellaSpesa("Spesa per casa", paolo.getUser());
+    paolo.shareList(spesa_casa, carlo);
+    paolo.shareList(spesa_casa, cecilia);
+
+    paolo.addProductToList(spesa_casa, latte, 3);
+    cecilia.addProductToList(spesa_casa, bistecca, 1);
+    carlo.addProductToList(spesa_casa, dentifricio, 5);
 
 
+    carlo.printListOwner(spesa_nonna);
+    cecilia.printListOwner(spesa_casa);
+
+    paolo.printListSharedUsers(spesa_nonna);
+    carlo.printListSharedUsers(spesa_casa);
 
 
     //carlo.printListSharedUsers(spesa_nonna);
 
 
     paolo.printAllShoppingLists();
-
-
+    cecilia.printAllShoppingLists();
     carlo.printAllShoppingLists();
 
 
-    carlo.addProductToList(spesa_nonna, bistecca, 3);
+    cecilia.addProductToList(spesa_nonna, bistecca, 3);
     paolo.addProductToList(spesa_nonna, dentifricio, 1);
+
 
     carlo.addProductToList(spesa_nonna, latte, 10);
 
@@ -100,8 +117,22 @@ int main() {
 
 
     carlo.printAllShoppingLists();
-
+    cecilia.printAllShoppingLists();
     paolo.printAllShoppingLists();
+
+    paolo.removeProductFromList(spesa_nonna, televisore);
+
+    carlo.printAllShoppingLists();
+    cecilia.printAllShoppingLists();
+    paolo.printAllShoppingLists();
+
+    paolo.reduceProductQuantity(spesa_nonna, latte, 3);
+
+    carlo.printAllShoppingLists();
+    cecilia.printAllShoppingLists();
+    paolo.printAllShoppingLists();
+
+
 
 
 

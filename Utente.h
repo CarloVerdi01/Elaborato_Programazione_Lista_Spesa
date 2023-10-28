@@ -26,6 +26,10 @@ public:
 
     void addProductToListByName(std::string n, std::shared_ptr<Prodotto>& p, int quantity);
 
+    void removeProductFromListByName(std::string n, std::shared_ptr<Prodotto>& p);
+
+    void reduceProductFromListByName(std::string n, std::shared_ptr<Prodotto>& p, int quantity);
+
     void addNewList(ListaDellaSpesa& ls);
 
     void printOneShoppingList(const ListaDellaSpesa& ls);
@@ -40,6 +44,14 @@ public:
 
     void updateAdd(std::string ls, std::shared_ptr<Prodotto> p, int q) override{
         addProductToListByName(ls, p, q );
+    }
+
+    void updateRemove(std::string ls, std::shared_ptr<Prodotto> p) override{
+        removeProductFromListByName(ls, p);
+    }
+
+    void updateDecrement(std::string ls, std::shared_ptr<Prodotto> p, int q) override{
+        reduceProductFromListByName(ls, p, q);
     }
 
 
