@@ -142,3 +142,21 @@ bool ListaDellaSpesa::isSharedUser(std::string u) {
     return false;
 }
 
+int ListaDellaSpesa::getProductQuantity(std::shared_ptr<Prodotto> &p) {
+    for (auto iter : lista_della_spesa){
+        if (iter.second->getName() == p->getName())
+            return iter.second->getQuantity();
+    }
+}
+
+bool ListaDellaSpesa::findSharedUser(std::string n){
+    bool found = false;
+    for (const std::string& iter : utentiCondivisi){
+        if (iter == n){
+            found = true;
+            break;
+        }
+    }
+    return found;
+}
+

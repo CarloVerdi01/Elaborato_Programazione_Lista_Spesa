@@ -36,6 +36,9 @@ void Utente::addProductToListByName(std::string n, std::shared_ptr<Prodotto> &p,
     for (auto iter = listeSpesa.begin(); iter != listeSpesa.end(); ++iter) {
         if (iter->getListName() == n) {
             found = true;
+            iter->addProduct(p, quantity);
+            break;
+            /*
             if (user == iter->getOwner()) {
                 iter->addProduct(p, quantity);
             } else {
@@ -43,8 +46,8 @@ void Utente::addProductToListByName(std::string n, std::shared_ptr<Prodotto> &p,
                 if (found) {
                     iter->addProduct(p, quantity);
                 }
-
-            } break;
+            }
+             */
         }
     }
     if (!found) {
@@ -60,15 +63,19 @@ void Utente::removeProductFromListByName(std::string n, std::shared_ptr<Prodotto
     for (auto iter = listeSpesa.begin(); iter != listeSpesa.end(); ++iter) {
         if (iter->getListName() == n) {
             found = true;
+            iter->removeProduct(p);
+            break;
+            /*
             if (user == iter->getOwner()) {
                 iter->removeProduct(p);
             } else {
                 usable = iter->isSharedUser(user);
-                if (found) {
+                if (usable) {
                     iter->removeProduct(p);
                 }
 
             } break;
+             */
         }
     }
     if (!found) {
@@ -84,6 +91,9 @@ void Utente::reduceProductFromListByName(std::string n, std::shared_ptr<Prodotto
     for (auto iter = listeSpesa.begin(); iter != listeSpesa.end(); ++iter) {
         if (iter->getListName() == n) {
             found = true;
+            iter->reduceProductQuantity(p, quantity);
+            break;
+            /*
             if (user == iter->getOwner()) {
                 iter->reduceProductQuantity(p, quantity);
             } else {
@@ -93,6 +103,7 @@ void Utente::reduceProductFromListByName(std::string n, std::shared_ptr<Prodotto
                 }
 
             } break;
+            */
         }
     }
     if (!found) {
@@ -153,3 +164,44 @@ void Utente::addNewList(ListaDellaSpesa &ls) {
     listeSpesa.push_back(ls);
 }
 
+bool Utente::findProductInList(const ListaDellaSpesa &ls, std::shared_ptr<Prodotto> &p) {
+    return ls.findProduct(p);
+}
+
+void Utente::printAllShoopingListsName() const {
+    std::cout << "Liste spesa " << user << ": " << std::endl;
+    for (auto iter : listeSpesa)
+        std::cout << iter.getListName() << std::endl;
+    std::cout << " " << std::endl;
+}
+
+bool Utente::findList(std::string n) const {
+    bool found = false;
+    for (auto iter:listeSpesa){
+        if (iter.getListName() == n){
+            found = true;
+            break;
+        }
+    }
+    return found;
+}
+
+bool Utente::findProductInListByName(const std::string n, std::shared_ptr<Prodotto> &p) {
+    bool found = false;
+    for (auto iter : listeSpesa){
+        if (iter.getListName() == n){
+            found = iter.findProduct(p);
+            break;
+        }
+    }
+    return found;
+
+}
+
+int Utente::getProductQuantityInList(const std::string list, std::shared_ptr<Prodotto> &p) {
+    for (auto iter = listeSpesa.begin(); iter != listeSpesa.end(); ++iter){
+        if (iter->getListName() == list){
+            return iter->getProductQuantity(p);
+        }
+    }
+}

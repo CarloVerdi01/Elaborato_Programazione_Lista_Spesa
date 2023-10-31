@@ -40,6 +40,10 @@ public:
 
     void shareList(Observer* o, std::string user);
 
+    bool findSharedUser(std::string n);
+
+    int getProductQuantity(std::shared_ptr<Prodotto>& p);
+
     void notifyAdd(std::string ls, std::shared_ptr<Prodotto> p, int q) override{
         for (auto iter = observers.begin(); iter != observers.end(); ++iter) {
             (*iter)->updateAdd(ls, p, q);
@@ -85,8 +89,6 @@ public:
     std::string getOwner() const{
         return userOwner;
     }
-
-
 
     std::string getListName() const{
         return listName;

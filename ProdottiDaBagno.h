@@ -48,6 +48,14 @@ public:
         return productQuantity;
     }
 
+    float getPrice() const{
+        return productPrice;
+    }
+
+    void setPrice(float p){
+        productPrice = p;
+    }
+
 private:
     std::string productCategory;
 

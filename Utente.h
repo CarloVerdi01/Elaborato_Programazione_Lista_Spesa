@@ -42,6 +42,16 @@ public:
 
     void printAllShoppingLists() const;
 
+    bool findList(std::string n) const;
+
+    bool findProductInList(const ListaDellaSpesa& ls, std::shared_ptr<Prodotto> &p);
+
+    bool findProductInListByName(const std::string n, std::shared_ptr<Prodotto> &p);
+
+    int getProductQuantityInList(const std::string list, std::shared_ptr<Prodotto> &p);
+
+    void printAllShoopingListsName() const;
+
     void updateAdd(std::string ls, std::shared_ptr<Prodotto> p, int q) override{
         addProductToListByName(ls, p, q );
     }

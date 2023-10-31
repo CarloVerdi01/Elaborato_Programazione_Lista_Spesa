@@ -62,6 +62,8 @@ int main() {
 
     Utente cecilia("Cecilia", "Verdi");
 
+    Utente antonio("Antonio", "Verdi");
+
     ListaDellaSpesa& spesa_nonna = carlo.creaListaDellaSpesa("Spesa Nonna", carlo.getUser());
     carlo.addProductToList(spesa_nonna, coca_cola, 2);
     carlo.addProductToList(spesa_nonna, bistecca, 1);
@@ -106,9 +108,12 @@ int main() {
     paolo.addProductToList(spesa_nonna, dentifricio, 1);
 
 
-    carlo.addProductToList(spesa_nonna, latte, 10);
+    carlo.addProductToListByName(spesa_nonna.getListName(), latte, 10);
 
     paolo.addProductToList(spesa_nonna, latte, 2);
+    antonio.addProductToList(spesa_nonna, baguette, 3);
+
+
 
 
 
@@ -131,6 +136,12 @@ int main() {
     carlo.printAllShoppingLists();
     cecilia.printAllShoppingLists();
     paolo.printAllShoppingLists();
+
+    carlo.printAllShoopingListsName();
+    paolo.printAllShoopingListsName();
+    cecilia.printAllShoopingListsName();
+
+
 
 
 
