@@ -13,6 +13,7 @@
 #include "Observer.h"
 
 
+
 class ListaDellaSpesa : public Subject{
 public:
     ListaDellaSpesa(std::string name, std::string owner) : listName(name), userOwner(owner){}
@@ -23,44 +24,67 @@ public:
 
     ListaDellaSpesa(const ListaDellaSpesa &other) : listName(other.listName), userOwner(other.userOwner) {
         for (auto iter  : other.lista_della_spesa) {
-            addProduct(iter.second, iter.second->getQuantity());
+            addProduct(iter.second, iter.second.getQuantity());
         }
     }
 
 
-    void addProduct(std::shared_ptr<Prodotto>& p, int quantity);
+    void addProduct(Prodotto& p, const int quantity );
 
-    void removeProduct(std::shared_ptr<Prodotto>& p);
+    void removeProduct(std::string product);
 
-    void reduceProductQuantity(std::shared_ptr<Prodotto>& p, int q);
+    void reduceProductQuantity(std::string product, int q);
 
-    bool findProduct(std::shared_ptr<Prodotto>& p) const;
+    std::list<std::string> findProductOfCategory(std::string category) const;
+
+    int getNumberOfProduct() const;
+
+    int getNumberOfProductToBuy() const;
+
+    int getNumberOfPurchasedProduct() const;
 
     void printList() const;
 
     void shareList(Observer* o, std::string user);
 
-    bool findSharedUser(std::string n);
+    void setProductBought(std::string product);
 
-    int getProductQuantity(std::shared_ptr<Prodotto>& p);
+    void setProductNotBought(std::string product);
 
-    void notifyAdd(std::string ls, std::shared_ptr<Prodotto> p, int q) override{
+    int getProductQuantity(std::string p);
+
+    bool isSharedUser(std::string u) const;
+
+
+    void notify(Operazione operazioni, std::string ls, Prodotto& p, std::string product, int q , bool state) override{
+        for (auto iter = observers.begin(); iter != observers.end(); ++iter){
+            (*iter)->update(operazioni, ls, p, product, q , state);
+        }
+    }
+
+
+    /*
+    void notifyAdd(std::string ls, Prodotto& p, int q) override{
         for (auto iter = observers.begin(); iter != observers.end(); ++iter) {
             (*iter)->updateAdd(ls, p, q);
         }
     }
 
-    void notifyRemove(std::string ls, std::shared_ptr<Prodotto> p) override{
+    void notifyRemove(std::string ls, std::string p) override{
         for (auto iter = observers.begin(); iter != observers.end(); ++iter) {
             (*iter)->updateRemove(ls, p);
         }
     }
 
-    void notifyDecrement(std::string ls, std::shared_ptr<Prodotto> p, int q) override{
+    void notifyDecrement(std::string ls, std::string p, int q) override{
         for (auto iter = observers.begin(); iter != observers.end(); ++iter) {
             (*iter)->updateDecrement(ls, p, q);
         }
     }
+
+     */
+
+
 
     void registerObserver(Observer* o) override{
         observers.push_back(o);
@@ -70,17 +94,16 @@ public:
         observers.remove(o);
     }
 
-    void printListOwner(){
+    void printListOwner() const{
         std::cout << "Creatore lista " << listName << ": " << userOwner << std::endl;
     }
 
-    void printListSharedUsers();
+    void printListSharedUsers() const;
 
     std::list<std::string> getSharedUsers() const{
         return utentiCondivisi;
     }
 
-    bool isSharedUser(std::string u);
 
     void setOwner(std::string o) {
         userOwner = o;
@@ -94,17 +117,24 @@ public:
         return listName;
     }
 
-    void setListName(std::string n) {
+    void setListName(const std::string n) {
         listName = n;
     }
 
+    bool findProduct(const std::string product) const;
+
+    bool getProductStatus(std::string product) const;
+
+
 
 private:
-    std::multimap<std::string, std::shared_ptr<Prodotto>> lista_della_spesa;
+    std::multimap<std::string, Prodotto> lista_della_spesa;
     std::string listName;
     std::string userOwner;
     std::list<std::string> utentiCondivisi;
     std::list<Observer*> observers;
+
+
 
 };
 

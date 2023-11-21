@@ -6,65 +6,32 @@
 #include "Utente.h"
 #include "ListaDellaSpesa.h"
 #include "Prodotto.h"
-#include "ProdottiDaBagno.h"
-#include "Abbigliamento.h"
-#include "Altro.h"
-#include "Bevande.h"
-#include "Elettronica.h"
-#include "Forno.h"
-#include "FruttaEVerdura.h"
-#include "Igiene.h"
-#include "Macelleria.h"
-#include "Pescheria.h"
-#include "Pulizia.h"
 
-void ListaDellaSpesa::addProduct(std::shared_ptr<Prodotto>& p, int quantity) {
-    bool found = false;
-    for (auto iter : lista_della_spesa){
-        if (iter.second->getName() == p->getName()){
-            iter.second->addQuantity(quantity);
-            found = true;
-            break;
+void ListaDellaSpesa::addProduct(Prodotto& p, const int quantity ) {
+    if (quantity > 0) {
+        bool found = false;
+        for (auto iter: lista_della_spesa) {
+            if (iter.second.getName() == p.getName()) {
+                iter.second.addQuantity(quantity);
+                found = true;
+                break;
+            }
         }
-    }
-    if (!found) {
-        std::shared_ptr<Prodotto> copia;
-        if ( std::dynamic_pointer_cast<ProdottiDaBagno>(p)) {
-            copia = std::make_shared<ProdottiDaBagno>(p->getName(), p->getPrice());
-        } else if (std::dynamic_pointer_cast<Abbigliamento>(p)){
-            copia = std::make_shared<Abbigliamento>(p->getName(), p->getPrice());
-        } else if (std::dynamic_pointer_cast<Altro>(p)){
-            copia = std::make_shared<Altro>(p->getName(), p->getPrice());
-        } else if (std::dynamic_pointer_cast<Bevande>(p)){
-            copia = std::make_shared<Bevande>(p->getName(), p->getPrice());
-        }else if (std::dynamic_pointer_cast<Elettronica>(p)){
-            copia = std::make_shared<Elettronica>(p->getName(), p->getPrice());
-        } else if (std::dynamic_pointer_cast<Forno>(p)){
-            copia = std::make_shared<Forno>(p->getName(), p->getPrice());
-        } else if (std::dynamic_pointer_cast<FruttaEVerdura>(p)){
-            copia = std::make_shared<FruttaEVerdura>(p->getName(), p->getPrice());
-        } else if (std::dynamic_pointer_cast<Igiene>(p)){
-            copia = std::make_shared<Igiene>(p->getName(), p->getPrice());
-        } else if (std::dynamic_pointer_cast<Macelleria>(p)){
-            copia = std::make_shared<Macelleria>(p->getName(), p->getPrice());
-        } else if (std::dynamic_pointer_cast<Pescheria>(p)){
-            copia = std::make_shared<Pescheria>(p->getName(), p->getPrice());
-        } else if (std::dynamic_pointer_cast<Pulizia>(p)){
-            copia = std::make_shared<Pulizia>(p->getName(), p->getPrice());
+        if (!found) {
+            Prodotto copia(p);
+            copia.setQuantity(quantity);
+            lista_della_spesa.insert(std::make_pair(copia.getCategory(), copia));
         }
-        if (copia) {
-            copia->setQuantity(quantity);
-            lista_della_spesa.insert(std::make_pair(copia->getCategory(), copia));
-
-        }
-    }
-    notifyAdd(listName, p , quantity);
+        //notifyAdd(listName, p , quantity);
+        notify(Operazione::Aggiunta, listName, p, " ", quantity, false);
+    } else
+        std::cout << "Quantità non accettabile!" << std::endl;
 }
 
-bool ListaDellaSpesa::findProduct(std::shared_ptr<Prodotto>& p) const{
+bool ListaDellaSpesa::findProduct(const std::string product) const{
     bool found = false;
     for (auto iter : lista_della_spesa){
-        if (iter.second->getName() == p->getName()){
+        if (iter.second.getName() == product){
             found = true;
             break;
         }
@@ -73,59 +40,70 @@ bool ListaDellaSpesa::findProduct(std::shared_ptr<Prodotto>& p) const{
 }
 
 
-void ListaDellaSpesa::removeProduct(std::shared_ptr<Prodotto> &p) {
+void ListaDellaSpesa::removeProduct(const std::string product) {
     bool found = false;
     for (auto iter = lista_della_spesa.begin(); iter != lista_della_spesa.end();) {
-        if (iter->second->getName() == p->getName()) {
+        if (iter->second.getName() == product) {
             found = true;
             lista_della_spesa.erase(iter);
-            notifyRemove(listName, p);
+            //notifyRemove(listName, product);
+            notify(Operazione::Rimozione, listName, iter->second, product, 0, false);
             break;
         } else {
             ++iter;
         }
     }
     if (!found){
-        std::cout << "Prodotto non presente nella lista!" << std::endl;
+        std::cout << "Prodotto " << product << " non presente nella lista!" << std::endl;
     }
 }
 
 void ListaDellaSpesa::printList() const {
-    float count = 0;
     std::cout << listName << ":" << std::endl;
     for (auto iter : lista_della_spesa) {
-        iter.second->printProduct();
-        count += (iter.second->getPrice() * iter.second->getQuantity());
+        iter.second.printProduct();
     }
-    std::cout << "Spesa totale: " << count << "€" << std::endl;
+    int count = getNumberOfPurchasedProduct();
+    int count2 = getNumberOfProduct();
+    std::cout << count<<"/"<<count2 << std::endl;
 }
 
-void ListaDellaSpesa::reduceProductQuantity(std::shared_ptr<Prodotto> &p, int q) {
-    for (auto iter = lista_della_spesa.begin(); iter != lista_della_spesa.end();) {
-        if (iter->second->getName() == p->getName()) {
-            if (iter->second->getQuantity() < q ||  iter->second->getQuantity() == q) {
-                lista_della_spesa.erase(iter);
-                break;
+void ListaDellaSpesa::reduceProductQuantity(const std::string product, const int q) {
+    if (q > 0) {
+        bool found = false;
+        for (auto iter = lista_della_spesa.begin(); iter != lista_della_spesa.end();) {
+            if (iter->second.getName() == product) {
+                found = true;
+                if (iter->second.getQuantity() < q || iter->second.getQuantity() == q) {
+                    lista_della_spesa.erase(iter);
+                    break;
+                } else {
+                    iter->second.removeQuantity(q);
+                    break;
+                }
+            } else {
+                ++iter;
             }
-            else {
-                iter->second->removeQuantity(q);
-                break;
-            }
-        } else {
-            ++iter;
         }
-    }
-    notifyDecrement(listName, p, q);
+        //notifyDecrement(listName, product, q);
+        auto firstElementIterator = lista_della_spesa.begin();
+        Prodotto &firstElementSecond = firstElementIterator->second;
+        notify(Operazione::Decremento, listName, firstElementSecond, product, q, false);
+
+        if (!found)
+            std::cout << "Prodotto " << product << " non presente nella lista!" << std::endl;
+    } else
+        std::cout << "Quantità non accettabile!" << std::endl;
 }
 
-void ListaDellaSpesa::shareList(Observer* o, std::string user) {
+void ListaDellaSpesa::shareList(Observer* o, const std::string user) {
     utentiCondivisi.push_back(user);
     registerObserver(o);
 
 
 }
 
-void ListaDellaSpesa::printListSharedUsers() {
+void ListaDellaSpesa::printListSharedUsers() const {
         printListOwner();
         std::cout << "Lista " << listName << " condivisa con: " << std::endl;
         for (auto iter : utentiCondivisi){
@@ -134,7 +112,7 @@ void ListaDellaSpesa::printListSharedUsers() {
         std::cout << " " << std::endl;
 }
 
-bool ListaDellaSpesa::isSharedUser(std::string u) {
+bool ListaDellaSpesa::isSharedUser(const std::string u) const {
     for (auto iter: utentiCondivisi){
         if ( iter == u)
             return true;
@@ -142,21 +120,94 @@ bool ListaDellaSpesa::isSharedUser(std::string u) {
     return false;
 }
 
-int ListaDellaSpesa::getProductQuantity(std::shared_ptr<Prodotto> &p) {
+int ListaDellaSpesa::getProductQuantity(const std::string p) {
+    int quantity = 0;
     for (auto iter : lista_della_spesa){
-        if (iter.second->getName() == p->getName())
-            return iter.second->getQuantity();
+        if (iter.second.getName() == p)
+            quantity =  iter.second.getQuantity();
     }
+    return quantity;
 }
 
-bool ListaDellaSpesa::findSharedUser(std::string n){
-    bool found = false;
-    for (const std::string& iter : utentiCondivisi){
-        if (iter == n){
-            found = true;
-            break;
+
+std::list<std::string> ListaDellaSpesa::findProductOfCategory(const std::string category) const {
+    std::list<std::string> prodotti;
+    for (auto iter : lista_della_spesa){
+        if (iter.first == category){
+            std::string name = iter.second.getName();
+            prodotti.push_back(name);
         }
     }
-    return found;
+    return prodotti;
 }
 
+int ListaDellaSpesa::getNumberOfProduct() const {
+    int count = 0;
+    for (auto iter : lista_della_spesa){
+        count += 1;
+    }
+    return count;
+}
+
+
+int ListaDellaSpesa::getNumberOfProductToBuy() const {
+    int count = 0;
+    for (auto iter : lista_della_spesa){
+        if (!iter.second.getStatus())
+            count+= 1;
+    }
+    return count;
+}
+
+int ListaDellaSpesa::getNumberOfPurchasedProduct() const {
+    int count = 0;
+    for (auto iter : lista_della_spesa){
+        if (iter.second.getStatus())
+            count += 1;
+    }
+    return count;
+}
+
+void ListaDellaSpesa::setProductBought(const std::string product) {
+    bool found = false;
+    for (auto iter = lista_della_spesa.begin(); iter != lista_della_spesa.end(); ++iter){
+        if (iter->second.getName() == product){
+            found = true;
+            iter->second.setStatus(true);
+            auto firstElementIterator = lista_della_spesa.begin();
+            Prodotto& firstElementSecond = firstElementIterator->second;
+            notify(Operazione::ModificaStato, listName, firstElementSecond, product, 0 , true);
+        }
+    }
+    if (!found)
+        std::cout << "Prodotto " << product << " non presente nella lista!" << std::endl;
+
+}
+
+
+void ListaDellaSpesa::setProductNotBought(const std::string product) {
+    bool found = false;
+    for (auto iter = lista_della_spesa.begin(); iter != lista_della_spesa.end(); ++iter){
+        if (iter->second.getName() == product){
+            found = true;
+            iter->second.setStatus(false);
+            auto firstElementIterator = lista_della_spesa.begin();
+            Prodotto& firstElementSecond = firstElementIterator->second;
+            notify(Operazione::ModificaStato, listName, firstElementSecond, product, 0 , false);
+        }
+    }
+    if (!found)
+        std::cout << "Prodotto " << product << " non presente nella lista!" << std::endl;
+
+}
+
+bool ListaDellaSpesa::getProductStatus(std::string product) const {
+    for (auto iter : lista_della_spesa){
+        if (iter.second.getName() == product){
+            if (iter.second.getStatus())
+                return true;
+            else
+                return false;
+        }
+    }
+}

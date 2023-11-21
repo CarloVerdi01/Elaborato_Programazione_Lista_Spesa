@@ -3,17 +3,15 @@
 //
 #include "gtest/gtest.h"
 #include "../Utente.h"
-#include "../ProdottiDaBagno.h"
-#include "../Bevande.h"
-#include "../Forno.h"
+
 
 class UserTestSuite : public ::testing::Test{
 protected:
 
     Utente carlo = Utente("Carlo", "Verdi");
-    std::shared_ptr<Prodotto> sapone = std::make_shared<ProdottiDaBagno>("Saponetta", 2.20);
-    std::shared_ptr<Prodotto> coca_cola = std::make_shared<Bevande>("Coca Cola", 1.70);
-    std::shared_ptr<Prodotto> baguette = std::make_shared<Forno>("Baguette", 1.20);
+    Prodotto matita = Prodotto("Lapis", "Prodotti Disegno");
+    Prodotto baguette = Prodotto("Baguette", "Forno");
+    Prodotto spazzolino = Prodotto("Spazzolino", "Igiene");
     ListaDellaSpesa& spesa_nonna = carlo.creaListaDellaSpesa("Spesa nonna", carlo.getUser());
 
 
@@ -33,53 +31,68 @@ TEST_F(UserTestSuite, ListCreationTest){
 }
 
 TEST_F(UserTestSuite, AddProductToListTest){
-    carlo.addProductToList(spesa_nonna, sapone, 3);
-    ASSERT_TRUE(carlo.findProductInList(spesa_nonna, sapone));
-    ASSERT_EQ(3, spesa_nonna.getProductQuantity(sapone));
+    carlo.addProductToList(spesa_nonna, matita, 3);
+    ASSERT_TRUE(carlo.findProductInList(spesa_nonna, "Lapis"));
+    ASSERT_EQ(3, spesa_nonna.getProductQuantity("Lapis"));
     carlo.addProductToList(spesa_nonna, baguette, 2 );
-    ASSERT_TRUE(carlo.findProductInList(spesa_nonna, baguette));
-    ASSERT_EQ(2, spesa_nonna.getProductQuantity(baguette));
-    carlo.addProductToListByName(spesa_nonna.getListName(), coca_cola, 3);
-    ASSERT_TRUE(carlo.findProductInList(spesa_nonna, coca_cola));
-    ASSERT_EQ(3, spesa_nonna.getProductQuantity(coca_cola));
+    ASSERT_TRUE(carlo.findProductInList(spesa_nonna, "Baguette"));
+    ASSERT_EQ(2, spesa_nonna.getProductQuantity("Baguette"));
+    carlo.addProductToListByName(spesa_nonna.getListName(), spazzolino, 3);
+    ASSERT_TRUE(carlo.findProductInList(spesa_nonna, "Spazzolino"));
+    ASSERT_EQ(3, spesa_nonna.getProductQuantity("Spazzolino"));
+    testing::internal::CaptureStdout();
+    carlo.addProductToList(spesa_nonna, matita, -2);
+    std::string output = testing::internal::GetCapturedStdout();
+    EXPECT_NE(output.find("Quantità non accettabile!"), std::string::npos);
 }
 
 TEST_F(UserTestSuite, removeProductFromListTest) {
-    carlo.addProductToList(spesa_nonna, sapone, 5);
+    carlo.addProductToList(spesa_nonna, matita, 5);
     carlo.addProductToList(spesa_nonna, baguette, 1);
-    carlo.addProductToList(spesa_nonna, coca_cola, 4);
-    ASSERT_TRUE(carlo.findProductInList(spesa_nonna, sapone));
-    ASSERT_TRUE(carlo.findProductInList(spesa_nonna, baguette));
-    ASSERT_TRUE(carlo.findProductInList(spesa_nonna, coca_cola));
-    carlo.removeProductFromList(spesa_nonna, sapone);
-    ASSERT_FALSE(carlo.findProductInList(spesa_nonna, sapone));
-    ASSERT_TRUE(carlo.findProductInList(spesa_nonna, baguette));
-    ASSERT_TRUE(carlo.findProductInList(spesa_nonna, coca_cola));
-    carlo.removeProductFromList(spesa_nonna, coca_cola);
-    ASSERT_FALSE(carlo.findProductInList(spesa_nonna, sapone));
-    ASSERT_FALSE(carlo.findProductInList(spesa_nonna, coca_cola));
-    ASSERT_TRUE(carlo.findProductInList(spesa_nonna, baguette));
-    carlo.removeProductFromListByName(spesa_nonna.getListName(), baguette);
-    ASSERT_FALSE(carlo.findProductInList(spesa_nonna, sapone));
-    ASSERT_FALSE(carlo.findProductInList(spesa_nonna, coca_cola));
-    ASSERT_FALSE(carlo.findProductInList(spesa_nonna, baguette));
+    carlo.addProductToList(spesa_nonna, spazzolino, 4);
+    ASSERT_TRUE(carlo.findProductInList(spesa_nonna, "Lapis"));
+    ASSERT_TRUE(carlo.findProductInList(spesa_nonna, "Baguette"));
+    ASSERT_TRUE(carlo.findProductInList(spesa_nonna, "Spazzolino"));
+    carlo.removeProductFromList(spesa_nonna, "Lapis");
+    ASSERT_FALSE(carlo.findProductInList(spesa_nonna, "Lapis"));
+    ASSERT_TRUE(carlo.findProductInList(spesa_nonna, "Baguette"));
+    ASSERT_TRUE(carlo.findProductInList(spesa_nonna, "Spazzolino"));
+    carlo.removeProductFromList(spesa_nonna, "Spazzolino");
+    ASSERT_FALSE(carlo.findProductInList(spesa_nonna, "Lapis"));
+    ASSERT_FALSE(carlo.findProductInList(spesa_nonna, "Spazzolino"));
+    ASSERT_TRUE(carlo.findProductInList(spesa_nonna, "Baguette"));
+    carlo.removeProductFromListByName(spesa_nonna.getListName(), "Baguette");
+    ASSERT_FALSE(carlo.findProductInList(spesa_nonna, "Lapis"));
+    ASSERT_FALSE(carlo.findProductInList(spesa_nonna, "Spazzolino"));
+    ASSERT_FALSE(carlo.findProductInList(spesa_nonna, "Baguette"));
+    carlo.addProductToList(spesa_nonna, spazzolino);
+    testing::internal::CaptureStdout();
+    carlo.removeProductFromList(spesa_nonna, "spazzolino");
+    std::string output = testing::internal::GetCapturedStdout();
+    EXPECT_NE(output.find("Prodotto spazzolino non presente nella lista!"), std::string::npos);
 }
 
+
+
 TEST_F(UserTestSuite, reduceProductQuantityFromListTest){
-    carlo.addProductToList(spesa_nonna, sapone, 5);
+    carlo.addProductToList(spesa_nonna, matita, 5);
     carlo.addProductToList(spesa_nonna, baguette, 1);
-    carlo.addProductToList(spesa_nonna, coca_cola, 4);
-    ASSERT_TRUE(carlo.findProductInList(spesa_nonna, sapone));
-    ASSERT_TRUE(carlo.findProductInList(spesa_nonna, baguette));
-    ASSERT_TRUE(carlo.findProductInList(spesa_nonna, coca_cola));
-    carlo.reduceProductQuantity(spesa_nonna, sapone, 3);
-    carlo.reduceProductQuantity(spesa_nonna, coca_cola, 5);
-    carlo.reduceProductQuantity(spesa_nonna, baguette, 1);
-    ASSERT_TRUE(carlo.findProductInList(spesa_nonna, sapone));
-    ASSERT_EQ(2, spesa_nonna.getProductQuantity(sapone));
-    ASSERT_FALSE(carlo.findProductInList(spesa_nonna, baguette));
-    ASSERT_FALSE(carlo.findProductInList(spesa_nonna, coca_cola));
-    carlo.reduceProductFromListByName(spesa_nonna.getListName(), sapone, 1);
-    ASSERT_TRUE(carlo.findProductInList(spesa_nonna, sapone));
-    ASSERT_EQ(1, spesa_nonna.getProductQuantity(sapone));
+    carlo.addProductToList(spesa_nonna, spazzolino, 4);
+    ASSERT_TRUE(carlo.findProductInList(spesa_nonna, "Lapis"));
+    ASSERT_TRUE(carlo.findProductInList(spesa_nonna, "Baguette"));
+    ASSERT_TRUE(carlo.findProductInList(spesa_nonna, "Spazzolino"));
+    carlo.reduceProductQuantity(spesa_nonna, "Lapis", 3);
+    carlo.reduceProductQuantity(spesa_nonna, "Spazzolino", 5);
+    carlo.reduceProductQuantity(spesa_nonna, "Baguette", 1);
+    ASSERT_TRUE(carlo.findProductInList(spesa_nonna, "Lapis"));
+    ASSERT_EQ(2, spesa_nonna.getProductQuantity("Lapis"));
+    ASSERT_FALSE(carlo.findProductInList(spesa_nonna, "Baguette"));
+    ASSERT_FALSE(carlo.findProductInList(spesa_nonna, "Spazzolino"));
+    carlo.reduceProductFromListByName(spesa_nonna.getListName(), "Lapis", 1);
+    ASSERT_TRUE(carlo.findProductInList(spesa_nonna, "Lapis"));
+    ASSERT_EQ(1, spesa_nonna.getProductQuantity("Lapis"));
+    testing::internal::CaptureStdout();
+    carlo.reduceProductQuantity(spesa_nonna, "Lapis", -2);
+    std::string output = testing::internal::GetCapturedStdout();
+    EXPECT_NE(output.find("Quantità non accettabile!"), std::string::npos);
 }

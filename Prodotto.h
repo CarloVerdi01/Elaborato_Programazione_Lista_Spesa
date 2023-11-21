@@ -10,55 +10,79 @@
 
 class Prodotto {
 public:
-    Prodotto(std::string name, float price, int quantity) : productName(name), productPrice(price), productQuantity(quantity) {};
+    Prodotto(std::string name, std::string category, int quantity = 0, bool bought = false) : productName(name), productCategory(category), productQuantity(quantity), productStatus(bought) {};
 
-    Prodotto(const Prodotto& other) : productName(other.productName), productPrice(other.productPrice), productQuantity(other.productQuantity) {}
+    Prodotto(const Prodotto& other) : productName(other.productName), productCategory(other.productCategory), productQuantity(other.productQuantity), productStatus(other.productStatus) {}
 
-    virtual ~Prodotto() = default;
+    ~Prodotto() = default;
 
-    virtual void printProduct() = 0;
 
-    virtual void setCategory(std::string c) = 0;
+    void setCategory(const std::string c)  {
+        productCategory = c;
+    }
 
-    virtual std::string getCategory() const = 0;
+    const std::string& getCategory() const{
+        return productCategory;
+    }
 
-    virtual void addQuantity(int q) = 0;
+    void addQuantity(const int q){
+        if (q >= 0){
+            productQuantity += q;
+        } else
+            std::cout << "Quantità non accettabile!" << std::endl;
+    }
 
-    virtual void removeQuantity(int q) = 0;
+    void removeQuantity(const int q){
+        if (q > 0){
+            productQuantity -= q;
+        } else
+            std::cout << "Quantità non accettabile!" << std::endl;
+    }
+
+    void printProduct() const;
 
     bool operator ==(const Prodotto& other) const{
         return (productName == other.productName);
     }
 
-    void setName(std::string n){
+    void setName(const std::string n){
         productName = n;
     }
 
-    std::string getName() const{
+    const std::string getName() const{
         return productName;
     }
 
-    void setQuantity(int q){
-        productQuantity = q;
+    void setQuantity(const int q){
+        if (q >= 0){
+            productQuantity = q;
+        }
+        else
+            std::cout << "Quantità non accettabile!" << std::endl;
     }
 
     int getQuantity() const{
         return productQuantity;
     }
 
-    void setPrice(float p){
-        productPrice = p;
+    void setStatus(const bool s){
+        productStatus = s;
     }
 
-    float getPrice() const{
-        return productPrice;
+    const bool getStatus() const{
+        return productStatus;
     }
 
 
-protected:
+
+
+
+private:
     std::string productName;
     int productQuantity;
-    float productPrice;
+    std::string productCategory;
+    bool productStatus;
+
 };
 
 

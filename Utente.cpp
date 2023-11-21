@@ -6,6 +6,7 @@
 #include "Utente.h"
 
 
+
 ListaDellaSpesa& Utente::creaListaDellaSpesa(std::string name, std::string owner ) {
     ListaDellaSpesa nuovaLista(name, owner);
     listeSpesa.push_back(nuovaLista);
@@ -13,24 +14,28 @@ ListaDellaSpesa& Utente::creaListaDellaSpesa(std::string name, std::string owner
 }
 
 
-void Utente::addProductToList(ListaDellaSpesa& ls, std::shared_ptr<Prodotto> &p, int quantity) {
-    bool found = false;
-    if (user == ls.getOwner()){
-        found = true;
-        ls.addProduct(p, quantity);
-    } else{
-        found = ls.isSharedUser(user);
-        if (found){
+void Utente::addProductToList(ListaDellaSpesa& ls, Prodotto& p, int quantity ) {
+    if (quantity > 0) {
+        bool found = false;
+        if (user == ls.getOwner()) {
+            found = true;
             ls.addProduct(p, quantity);
+        } else {
+            found = ls.isSharedUser(user);
+            if (found) {
+                ls.addProduct(p, quantity);
+            }
         }
-    }
-    if (!found){
-        std::cout << userName << " non può aggiungere prodotti alla lista '" << ls.getListName() << "' perchè non condivisa con "<< user  << std::endl;
-    }
+        if (!found) {
+            std::cout << userName << " non può aggiungere prodotti alla lista '" << ls.getListName()
+                      << "' perchè non condivisa con " << user << std::endl;
+        }
+    }else
+        std::cout << "Quantità non accettabile!" << std::endl;
 
 }
 
-void Utente::addProductToListByName(std::string n, std::shared_ptr<Prodotto> &p, int quantity) {
+void Utente::addProductToListByName(const std::string n, Prodotto& p, const int quantity) {
     bool found = false;
     bool usable = false;
     for (auto iter = listeSpesa.begin(); iter != listeSpesa.end(); ++iter) {
@@ -38,16 +43,6 @@ void Utente::addProductToListByName(std::string n, std::shared_ptr<Prodotto> &p,
             found = true;
             iter->addProduct(p, quantity);
             break;
-            /*
-            if (user == iter->getOwner()) {
-                iter->addProduct(p, quantity);
-            } else {
-                usable = iter->isSharedUser(user);
-                if (found) {
-                    iter->addProduct(p, quantity);
-                }
-            }
-             */
         }
     }
     if (!found) {
@@ -57,25 +52,14 @@ void Utente::addProductToListByName(std::string n, std::shared_ptr<Prodotto> &p,
 
 }
 
-void Utente::removeProductFromListByName(std::string n, std::shared_ptr<Prodotto> &p) {
+void Utente::removeProductFromListByName(const std::string n, const std::string product) {
     bool found = false;
     bool usable = false;
     for (auto iter = listeSpesa.begin(); iter != listeSpesa.end(); ++iter) {
         if (iter->getListName() == n) {
             found = true;
-            iter->removeProduct(p);
+            iter->removeProduct(product);
             break;
-            /*
-            if (user == iter->getOwner()) {
-                iter->removeProduct(p);
-            } else {
-                usable = iter->isSharedUser(user);
-                if (usable) {
-                    iter->removeProduct(p);
-                }
-
-            } break;
-             */
         }
     }
     if (!found) {
@@ -85,25 +69,14 @@ void Utente::removeProductFromListByName(std::string n, std::shared_ptr<Prodotto
 
 }
 
-void Utente::reduceProductFromListByName(std::string n, std::shared_ptr<Prodotto> &p, int quantity) {
+void Utente::reduceProductFromListByName(const std::string n, const std::string product, const int quantity) {
     bool found = false;
     bool usable = false;
     for (auto iter = listeSpesa.begin(); iter != listeSpesa.end(); ++iter) {
         if (iter->getListName() == n) {
             found = true;
-            iter->reduceProductQuantity(p, quantity);
+            iter->reduceProductQuantity(product, quantity);
             break;
-            /*
-            if (user == iter->getOwner()) {
-                iter->reduceProductQuantity(p, quantity);
-            } else {
-                usable = iter->isSharedUser(user);
-                if (found) {
-                    iter->reduceProductQuantity(p, quantity);
-                }
-
-            } break;
-            */
         }
     }
     if (!found) {
@@ -114,7 +87,7 @@ void Utente::reduceProductFromListByName(std::string n, std::shared_ptr<Prodotto
 }
 
 
-void Utente::printOneShoppingList(const ListaDellaSpesa& ls) {
+void Utente::printOneShoppingList(const ListaDellaSpesa& ls) const {
     bool found = false;
     for (auto iter : listeSpesa){
         if (iter.getListName() == ls.getListName()){
@@ -129,8 +102,8 @@ void Utente::printOneShoppingList(const ListaDellaSpesa& ls) {
 
 }
 
-void Utente::removeProductFromList(ListaDellaSpesa &ls, std::shared_ptr<Prodotto> &p) {
-    ls.removeProduct(p);
+void Utente::removeProductFromList(ListaDellaSpesa &ls, const std::string product) {
+    ls.removeProduct(product);
 }
 
 void Utente::getShoppingLists() const {
@@ -141,14 +114,17 @@ void Utente::getShoppingLists() const {
 }
 
 
-void Utente::reduceProductQuantity(ListaDellaSpesa &ls, std::shared_ptr<Prodotto> &p, int q) {
-    ls.reduceProductQuantity(p, q);
+void Utente::reduceProductQuantity(ListaDellaSpesa &ls, const std::string product, const int q) {
+    if (q > 0) {
+        ls.reduceProductQuantity(product, q);
+    } else
+        std::cout << "Quantità non accettabile!" << std::endl;
 }
 
 
-void Utente::printAllShoppingLists() const{
-    std::cout << "Liste spese " << userName << ":" <<std::endl;
-    for (auto iter : listeSpesa) {
+void Utente::printAllShoppingLists() const {
+    std::cout << "Liste spesa " << userName << ":" <<std::endl;
+    for (const auto& iter : listeSpesa) {
         iter.printList();
         std::cout << " " << std::endl;
     }
@@ -164,8 +140,8 @@ void Utente::addNewList(ListaDellaSpesa &ls) {
     listeSpesa.push_back(ls);
 }
 
-bool Utente::findProductInList(const ListaDellaSpesa &ls, std::shared_ptr<Prodotto> &p) {
-    return ls.findProduct(p);
+bool Utente::findProductInList(const ListaDellaSpesa &ls, const std::string product) {
+    return ls.findProduct(product);
 }
 
 void Utente::printAllShoopingListsName() const {
@@ -175,7 +151,7 @@ void Utente::printAllShoopingListsName() const {
     std::cout << " " << std::endl;
 }
 
-bool Utente::findList(std::string n) const {
+bool Utente::findList(const std::string n) const {
     bool found = false;
     for (auto iter:listeSpesa){
         if (iter.getListName() == n){
@@ -186,22 +162,89 @@ bool Utente::findList(std::string n) const {
     return found;
 }
 
-bool Utente::findProductInListByName(const std::string n, std::shared_ptr<Prodotto> &p) {
+bool Utente::findProductInListByName(const std::string n, const std::string product) {
     bool found = false;
     for (auto iter : listeSpesa){
         if (iter.getListName() == n){
-            found = iter.findProduct(p);
+            found = iter.findProduct(product);
             break;
         }
     }
     return found;
-
 }
 
-int Utente::getProductQuantityInList(const std::string list, std::shared_ptr<Prodotto> &p) {
+int Utente::getProductQuantityInList(const std::string lista, const std::string product) {
+    int quantity = 0;
     for (auto iter = listeSpesa.begin(); iter != listeSpesa.end(); ++iter){
-        if (iter->getListName() == list){
-            return iter->getProductQuantity(p);
+        if (iter->getListName() == lista)
+            quantity = iter->getProductQuantity(product);
+    }
+    return quantity;
+}
+
+void Utente::setProductBought(ListaDellaSpesa &ls, const std::string product) {
+    bool found = false;
+    if (user == ls.getOwner()){
+        found = true;
+        ls.setProductBought(product);
+    } else{
+        found = ls.isSharedUser(user);
+        if (found){
+            ls.setProductBought(product);
+        }
+    }
+    if (!found)
+        std::cout << "Lista non presente tra quelle dell'utente!" << std::endl;
+}
+
+void Utente::setProductNotBought(ListaDellaSpesa &ls, const std::string product) {
+    bool found = false;
+    if (user == ls.getOwner()){
+        found = true;
+        ls.setProductNotBought(product);
+    } else{
+        found = ls.isSharedUser(user);
+        if (found){
+            ls.setProductNotBought(product);
+        }
+    }
+    if (!found)
+        std::cout << "Lista non presente tra quelle dell'utente!" << std::endl;
+}
+
+
+void Utente::setProductBoughtByName(const std::string ls, const std::string product) {
+    bool found = false;
+    for (auto iter = listeSpesa.begin(); iter != listeSpesa.end(); ++iter){
+        if (iter->getListName() == ls){
+            found = true;
+            iter->setProductBought(product);
+            break;
+        }
+    }
+    if (!found){
+        std::cout << "Lista non presente tra quelle dell'utente!" << std::endl;
+    }
+}
+
+void Utente::setProductNotBoughtByName(const std::string ls,  const std::string product) {
+    bool found = false;
+    for (auto iter = listeSpesa.begin(); iter != listeSpesa.end(); ++iter){
+        if (iter->getListName() == ls){
+            found = true;
+            iter->setProductNotBought(product);
+            break;
+        }
+    }
+    if (!found){
+        std::cout << "Lista non presente tra quelle dell'utente!" << std::endl;
+    }
+}
+
+bool Utente::isProductBought(const std::string ls, const std::string product) const {
+    for (auto iter : listeSpesa){
+        if (iter.getListName() == ls){
+            return iter.getProductStatus(product);
         }
     }
 }
