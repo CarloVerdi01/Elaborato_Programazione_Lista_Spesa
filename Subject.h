@@ -9,12 +9,7 @@
 #include <memory>
 #include "Observer.h"
 
-enum class Operazioni {
-    Aggiunta,
-    Rimozione,
-    Decremento,
-    ModificaStato
-};
+
 
 class Subject {
 public:
