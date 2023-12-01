@@ -10,7 +10,7 @@
 void ListaDellaSpesa::addProduct(Prodotto& p, const int quantity ) {
     if (quantity > 0) {
         bool found = false;
-        for (auto iter: lista_della_spesa) {
+        for (auto iter: listaDellaSpesa) {
             if (iter.second.getName() == p.getName()) {
                 iter.second.addQuantity(quantity);
                 found = true;
@@ -20,9 +20,8 @@ void ListaDellaSpesa::addProduct(Prodotto& p, const int quantity ) {
         if (!found) {
             Prodotto copia(p);
             copia.setQuantity(quantity);
-            lista_della_spesa.insert(std::make_pair(copia.getCategory(), copia));
+            listaDellaSpesa.insert(std::make_pair(copia.getCategory(), copia));
         }
-        //notifyAdd(listName, p , quantity);
         notify(Operazione::Aggiunta, listName, p, " ", quantity, false);
     } else
         std::cout << "Quantità non accettabile!" << std::endl;
@@ -30,7 +29,7 @@ void ListaDellaSpesa::addProduct(Prodotto& p, const int quantity ) {
 
 bool ListaDellaSpesa::findProduct(const std::string product) const{
     bool found = false;
-    for (auto iter : lista_della_spesa){
+    for (auto iter : listaDellaSpesa){
         if (iter.second.getName() == product){
             found = true;
             break;
@@ -42,10 +41,10 @@ bool ListaDellaSpesa::findProduct(const std::string product) const{
 
 void ListaDellaSpesa::removeProduct(const std::string product) {
     bool found = false;
-    for (auto iter = lista_della_spesa.begin(); iter != lista_della_spesa.end();) {
+    for (auto iter = listaDellaSpesa.begin(); iter != listaDellaSpesa.end();) {
         if (iter->second.getName() == product) {
             found = true;
-            lista_della_spesa.erase(iter);
+            listaDellaSpesa.erase(iter);
             //notifyRemove(listName, product);
             notify(Operazione::Rimozione, listName, iter->second, product, 0, false);
             break;
@@ -60,7 +59,7 @@ void ListaDellaSpesa::removeProduct(const std::string product) {
 
 void ListaDellaSpesa::printList() const {
     std::cout << listName << ":" << std::endl;
-    for (auto iter : lista_della_spesa) {
+    for (auto iter : listaDellaSpesa) {
         iter.second.printProduct();
     }
     int count = getNumberOfPurchasedProduct();
@@ -71,11 +70,11 @@ void ListaDellaSpesa::printList() const {
 void ListaDellaSpesa::reduceProductQuantity(const std::string product, const int q) {
     if (q > 0) {
         bool found = false;
-        for (auto iter = lista_della_spesa.begin(); iter != lista_della_spesa.end();) {
+        for (auto iter = listaDellaSpesa.begin(); iter != listaDellaSpesa.end();) {
             if (iter->second.getName() == product) {
                 found = true;
                 if (iter->second.getQuantity() < q || iter->second.getQuantity() == q) {
-                    lista_della_spesa.erase(iter);
+                    listaDellaSpesa.erase(iter);
                     break;
                 } else {
                     iter->second.removeQuantity(q);
@@ -85,8 +84,7 @@ void ListaDellaSpesa::reduceProductQuantity(const std::string product, const int
                 ++iter;
             }
         }
-        //notifyDecrement(listName, product, q);
-        auto firstElementIterator = lista_della_spesa.begin();
+        auto firstElementIterator = listaDellaSpesa.begin();
         Prodotto &firstElementSecond = firstElementIterator->second;
         notify(Operazione::Decremento, listName, firstElementSecond, product, q, false);
 
@@ -112,7 +110,7 @@ void ListaDellaSpesa::printListSharedUsers() const {
         std::cout << " " << std::endl;
 }
 
-bool ListaDellaSpesa::isSharedUser(const std::string u) const {
+const bool ListaDellaSpesa::isSharedUser(const std::string u) const {
     for (auto iter: utentiCondivisi){
         if ( iter == u)
             return true;
@@ -122,7 +120,7 @@ bool ListaDellaSpesa::isSharedUser(const std::string u) const {
 
 int ListaDellaSpesa::getProductQuantity(const std::string p) {
     int quantity = 0;
-    for (auto iter : lista_della_spesa){
+    for (auto iter : listaDellaSpesa){
         if (iter.second.getName() == p)
             quantity =  iter.second.getQuantity();
     }
@@ -130,9 +128,9 @@ int ListaDellaSpesa::getProductQuantity(const std::string p) {
 }
 
 
-std::list<std::string> ListaDellaSpesa::findProductOfCategory(const std::string category) const {
+const std::list<std::string> ListaDellaSpesa::findProductOfCategory(const std::string category) const {
     std::list<std::string> prodotti;
-    for (auto iter : lista_della_spesa){
+    for (auto iter : listaDellaSpesa){
         if (iter.first == category){
             std::string name = iter.second.getName();
             prodotti.push_back(name);
@@ -141,27 +139,27 @@ std::list<std::string> ListaDellaSpesa::findProductOfCategory(const std::string 
     return prodotti;
 }
 
-int ListaDellaSpesa::getNumberOfProduct() const {
+const int ListaDellaSpesa::getNumberOfProduct() const {
     int count = 0;
-    for (auto iter : lista_della_spesa){
+    for (auto iter : listaDellaSpesa){
         count += 1;
     }
     return count;
 }
 
 
-int ListaDellaSpesa::getNumberOfProductToBuy() const {
+const int ListaDellaSpesa::getNumberOfProductToBuy() const {
     int count = 0;
-    for (auto iter : lista_della_spesa){
+    for (auto iter : listaDellaSpesa){
         if (!iter.second.getStatus())
             count+= 1;
     }
     return count;
 }
 
-int ListaDellaSpesa::getNumberOfPurchasedProduct() const {
+const int ListaDellaSpesa::getNumberOfPurchasedProduct() const {
     int count = 0;
-    for (auto iter : lista_della_spesa){
+    for (auto iter : listaDellaSpesa){
         if (iter.second.getStatus())
             count += 1;
     }
@@ -170,11 +168,11 @@ int ListaDellaSpesa::getNumberOfPurchasedProduct() const {
 
 void ListaDellaSpesa::setProductBought(const std::string product) {
     bool found = false;
-    for (auto iter = lista_della_spesa.begin(); iter != lista_della_spesa.end(); ++iter){
+    for (auto iter = listaDellaSpesa.begin(); iter != listaDellaSpesa.end(); ++iter){
         if (iter->second.getName() == product){
             found = true;
             iter->second.setStatus(true);
-            auto firstElementIterator = lista_della_spesa.begin();
+            auto firstElementIterator = listaDellaSpesa.begin();
             Prodotto& firstElementSecond = firstElementIterator->second;
             notify(Operazione::ModificaStato, listName, firstElementSecond, product, 0 , true);
         }
@@ -187,11 +185,11 @@ void ListaDellaSpesa::setProductBought(const std::string product) {
 
 void ListaDellaSpesa::setProductNotBought(const std::string product) {
     bool found = false;
-    for (auto iter = lista_della_spesa.begin(); iter != lista_della_spesa.end(); ++iter){
+    for (auto iter = listaDellaSpesa.begin(); iter != listaDellaSpesa.end(); ++iter){
         if (iter->second.getName() == product){
             found = true;
             iter->second.setStatus(false);
-            auto firstElementIterator = lista_della_spesa.begin();
+            auto firstElementIterator = listaDellaSpesa.begin();
             Prodotto& firstElementSecond = firstElementIterator->second;
             notify(Operazione::ModificaStato, listName, firstElementSecond, product, 0 , false);
         }
@@ -202,7 +200,7 @@ void ListaDellaSpesa::setProductNotBought(const std::string product) {
 }
 
 bool ListaDellaSpesa::getProductStatus(std::string product) const {
-    for (auto iter : lista_della_spesa){
+    for (auto iter : listaDellaSpesa){
         if (iter.second.getName() == product){
             if (iter.second.getStatus())
                 return true;

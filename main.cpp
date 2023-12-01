@@ -53,7 +53,7 @@ int main() {
     carlo.addProductToList(spesa_gita, baguette);
     cecilia.addProductToList(spesa_gita, baguette);
 
-    //paolo.setProductBought(spesa_casa, "Lapis");
+
     carlo.setProductBought(spesa_gita, "Baguette");
 
     carlo.printAllShoppingLists();

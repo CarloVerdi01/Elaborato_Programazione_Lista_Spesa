@@ -151,7 +151,7 @@ void Utente::printAllShoopingListsName() const {
     std::cout << " " << std::endl;
 }
 
-bool Utente::findList(const std::string n) const {
+const bool Utente::findList(const std::string n) const {
     bool found = false;
     for (auto iter:listeSpesa){
         if (iter.getListName() == n){
@@ -241,7 +241,7 @@ void Utente::setProductNotBoughtByName(const std::string ls,  const std::string 
     }
 }
 
-bool Utente::isProductBought(const std::string ls, const std::string product) const {
+const bool& Utente::isProductBought(const std::string ls, const std::string product) const {
     for (auto iter : listeSpesa){
         if (iter.getListName() == ls){
             return iter.getProductStatus(product);

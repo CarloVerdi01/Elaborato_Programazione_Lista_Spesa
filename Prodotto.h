@@ -10,7 +10,7 @@
 
 class Prodotto {
 public:
-    Prodotto(std::string name, std::string category, int quantity = 0, bool bought = false) : productName(name), productCategory(category), productQuantity(quantity), productStatus(bought) {};
+    Prodotto(const std::string& name, const std::string& category, int quantity = 0, bool bought = false) : productName(name), productCategory(category), productQuantity(quantity), productStatus(bought) {};
 
     Prodotto(const Prodotto& other) : productName(other.productName), productCategory(other.productCategory), productQuantity(other.productQuantity), productStatus(other.productStatus) {}
 
@@ -45,11 +45,11 @@ public:
         return (productName == other.productName);
     }
 
-    void setName(const std::string n){
+    void setName(const std::string& n){
         productName = n;
     }
 
-    const std::string getName() const{
+    const std::string& getName() const{
         return productName;
     }
 
@@ -61,7 +61,7 @@ public:
             std::cout << "Quantità non accettabile!" << std::endl;
     }
 
-    int getQuantity() const{
+    const int& getQuantity() const{
         return productQuantity;
     }
 
@@ -69,7 +69,7 @@ public:
         productStatus = s;
     }
 
-    const bool getStatus() const{
+    const bool& getStatus() const{
         return productStatus;
     }
 

@@ -51,17 +51,17 @@ public:
 
     void printAllShoppingLists() const;
 
-    bool findList(const std::string n) const;
+    const bool findList(const std::string n) const;
 
     bool findProductInList(const ListaDellaSpesa& ls, std::string product);
 
-    bool findProductInListByName(const std::string n, std::string product);
+    bool findProductInListByName(std::string n, std::string product);
 
-    int getProductQuantityInList(const std::string list, std::string product);
+    int getProductQuantityInList(std::string list, std::string product);
 
     void printAllShoopingListsName() const;
 
-    bool isProductBought(std::string ls, std::string product) const;
+    const bool& isProductBought(std::string ls, std::string product) const;
 
 
     void update(Operazione operazione, std::string ls, Prodotto& p, std::string product, int quantity, bool state) override{
@@ -85,25 +85,6 @@ public:
     }
 
 
-
-    /*
-
-    void updateAdd(std::string ls, Prodotto& p, int q) override{
-        addProductToListByName(ls, p, q );
-    }
-
-    void updateRemove(std::string ls, std::string p) override{
-        removeProductFromListByName(ls, p);
-    }
-
-    void updateDecrement(std::string ls, std::string p, int q) override{
-        reduceProductFromListByName(ls, p, q);
-    }
-
-     */
-
-
-
     void shareList(ListaDellaSpesa& ls, Utente& u );
 
     void printListOwner(ListaDellaSpesa& ls){
@@ -114,11 +95,11 @@ public:
         ls.printListSharedUsers();
     }
 
-    std::string getListOwner(const ListaDellaSpesa& ls) const{
+    const std::string& getListOwner(const ListaDellaSpesa& ls) const{
         return ls.getOwner();
     }
 
-    std::list<std::string> getListSharedUsers(const ListaDellaSpesa& ls) const{
+    const std::list<std::string>& getListSharedUsers(const ListaDellaSpesa& ls) const{
         return ls.getSharedUsers();
     }
 
@@ -127,7 +108,7 @@ public:
         userName = n;
     }
 
-    std::string getName() const{
+    const std::string& getName() const{
         return userName;
     }
 
@@ -135,11 +116,11 @@ public:
         userSurname = s;
     }
 
-    std::string getSurname() const{
+    const std::string& getSurname() const{
         return userSurname;
     }
 
-    std::string getUser() const{
+    const std::string& getUser() const{
         return user;
     }
 
