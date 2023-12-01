@@ -3,7 +3,6 @@
 //
 
 #include <iostream>
-#include "Utente.h"
 #include "ListaDellaSpesa.h"
 #include "Prodotto.h"
 

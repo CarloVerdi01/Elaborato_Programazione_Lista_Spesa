@@ -40,16 +40,16 @@ public:
 
     void setProductBought(ListaDellaSpesa& ls, std::string product);
 
-    void setProductBoughtByName(const std::string ls, std::string product);
+    void setProductBoughtByName(std::string ls, std::string product);
 
     void setProductNotBought(ListaDellaSpesa& ls, std::string product);
 
-    void setProductNotBoughtByName(const std::string ls, std::string product);
+    void setProductNotBoughtByName(std::string ls, std::string product);
 
 
     void printAllShoppingLists() const;
 
-    const bool findList(const std::string n) const;
+    const bool findList(std::string n) const;
 
     bool findProductInList(const ListaDellaSpesa& ls, std::string product);
 
@@ -122,9 +122,9 @@ public:
         return user;
     }
 
-    void setUser(std::string n, std::string s){
+    void setUser(std::string& n, std::string& s){
         userName = n;
-        userSurname = n;
+        userSurname = s;
     }
 
 

@@ -17,7 +17,7 @@ public:
     ~Prodotto() = default;
 
 
-    void setCategory(const std::string c)  {
+    void setCategory(const std::string& c)  {
         productCategory = c;
     }
 

@@ -93,7 +93,7 @@ public:
         return listName;
     }
 
-    void setListName(const std::string n) {
+    void setListName(const std::string& n) {
         listName = n;
     }
 
