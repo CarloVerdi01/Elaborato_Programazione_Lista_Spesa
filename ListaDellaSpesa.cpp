@@ -45,7 +45,6 @@ void ListaDellaSpesa::removeProduct(const std::string product) {
         if (iter->second.getName() == product) {
             found = true;
             listaDellaSpesa.erase(iter);
-            //notifyRemove(listName, product);
             notify(Operazione::Rimozione, listName, iter->second, product, 0, false);
             break;
         } else {

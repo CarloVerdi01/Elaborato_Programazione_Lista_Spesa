@@ -20,8 +20,6 @@ public:
 
     ListaDellaSpesa& creaListaDellaSpesa(std::string name, std::string owner);
 
-    //void addProductToList(std::string n, std::shared_ptr<Prodotto>& p);
-
     void addProductToList(ListaDellaSpesa& ls, Prodotto& p, int quantity = 1);
 
     void addProductToListByName(std::string n, Prodotto& p, int quantity);
