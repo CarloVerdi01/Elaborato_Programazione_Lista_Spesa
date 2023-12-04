@@ -7,7 +7,7 @@
 
 
 
-ListaDellaSpesa& Utente::creaListaDellaSpesa(std::string name, std::string owner ) {
+ListaDellaSpesa& Utente::creaListaDellaSpesa(const std::string& name, const std::string& owner ) {
     ListaDellaSpesa nuovaLista(name, owner);
     listeSpesa.push_back(nuovaLista);
     return listeSpesa.back();
@@ -35,7 +35,7 @@ void Utente::addProductToList(ListaDellaSpesa& ls, Prodotto& p, int quantity ) {
 
 }
 
-void Utente::addProductToListByName(const std::string n, Prodotto& p, const int quantity) {
+void Utente::addProductToListByName(const std::string& n, Prodotto& p, const int quantity) {
     bool found = false;
     bool usable = false;
     for (auto iter = listeSpesa.begin(); iter != listeSpesa.end(); ++iter) {
@@ -52,7 +52,7 @@ void Utente::addProductToListByName(const std::string n, Prodotto& p, const int 
 
 }
 
-void Utente::removeProductFromListByName(const std::string n, const std::string product) {
+void Utente::removeProductFromListByName(const std::string& n, const std::string& product) {
     bool found = false;
     bool usable = false;
     for (auto iter = listeSpesa.begin(); iter != listeSpesa.end(); ++iter) {
@@ -69,7 +69,7 @@ void Utente::removeProductFromListByName(const std::string n, const std::string 
 
 }
 
-void Utente::reduceProductFromListByName(const std::string n, const std::string product, const int quantity) {
+void Utente::reduceProductFromListByName(const std::string& n, const std::string& product, const int quantity) {
     bool found = false;
     bool usable = false;
     for (auto iter = listeSpesa.begin(); iter != listeSpesa.end(); ++iter) {
@@ -102,7 +102,7 @@ void Utente::printOneShoppingList(const ListaDellaSpesa& ls) const {
 
 }
 
-void Utente::removeProductFromList(ListaDellaSpesa &ls, const std::string product) {
+void Utente::removeProductFromList(ListaDellaSpesa &ls, const std::string& product) {
     ls.removeProduct(product);
 }
 
@@ -114,7 +114,7 @@ void Utente::getShoppingLists() const {
 }
 
 
-void Utente::reduceProductQuantity(ListaDellaSpesa &ls, const std::string product, const int q) {
+void Utente::reduceProductQuantity(ListaDellaSpesa &ls, const std::string& product, const int q) {
     if (q > 0) {
         ls.reduceProductQuantity(product, q);
     } else
@@ -140,7 +140,7 @@ void Utente::addNewList(ListaDellaSpesa &ls) {
     listeSpesa.push_back(ls);
 }
 
-bool Utente::findProductInList(const ListaDellaSpesa &ls, const std::string product) {
+bool Utente::findProductInList(const ListaDellaSpesa &ls, const std::string& product) {
     return ls.findProduct(product);
 }
 
@@ -151,7 +151,7 @@ void Utente::printAllShoopingListsName() const {
     std::cout << " " << std::endl;
 }
 
-const bool Utente::findList(const std::string n) const {
+bool Utente::findList(const std::string& n) const {
     bool found = false;
     for (auto iter:listeSpesa){
         if (iter.getListName() == n){
@@ -162,7 +162,7 @@ const bool Utente::findList(const std::string n) const {
     return found;
 }
 
-bool Utente::findProductInListByName(const std::string n, const std::string product) {
+bool Utente::findProductInListByName(const std::string& n, const std::string& product) {
     bool found = false;
     for (auto iter : listeSpesa){
         if (iter.getListName() == n){
@@ -173,7 +173,7 @@ bool Utente::findProductInListByName(const std::string n, const std::string prod
     return found;
 }
 
-int Utente::getProductQuantityInList(const std::string lista, const std::string product) {
+int Utente::getProductQuantityInList(const std::string& lista, const std::string& product) {
     int quantity = 0;
     for (auto iter = listeSpesa.begin(); iter != listeSpesa.end(); ++iter){
         if (iter->getListName() == lista)
@@ -182,7 +182,7 @@ int Utente::getProductQuantityInList(const std::string lista, const std::string 
     return quantity;
 }
 
-void Utente::setProductBought(ListaDellaSpesa &ls, const std::string product) {
+void Utente::setProductBought(ListaDellaSpesa &ls, const std::string& product) {
     bool found = false;
     if (user == ls.getOwner()){
         found = true;
@@ -197,7 +197,7 @@ void Utente::setProductBought(ListaDellaSpesa &ls, const std::string product) {
         std::cout << "Lista non presente tra quelle dell'utente!" << std::endl;
 }
 
-void Utente::setProductNotBought(ListaDellaSpesa &ls, const std::string product) {
+void Utente::setProductNotBought(ListaDellaSpesa &ls, const std::string& product) {
     bool found = false;
     if (user == ls.getOwner()){
         found = true;
@@ -213,7 +213,7 @@ void Utente::setProductNotBought(ListaDellaSpesa &ls, const std::string product)
 }
 
 
-void Utente::setProductBoughtByName(const std::string ls, const std::string product) {
+void Utente::setProductBoughtByName(const std::string& ls, const std::string& product) {
     bool found = false;
     for (auto iter = listeSpesa.begin(); iter != listeSpesa.end(); ++iter){
         if (iter->getListName() == ls){
@@ -227,7 +227,7 @@ void Utente::setProductBoughtByName(const std::string ls, const std::string prod
     }
 }
 
-void Utente::setProductNotBoughtByName(const std::string ls,  const std::string product) {
+void Utente::setProductNotBoughtByName(const std::string& ls,  const std::string& product) {
     bool found = false;
     for (auto iter = listeSpesa.begin(); iter != listeSpesa.end(); ++iter){
         if (iter->getListName() == ls){
@@ -241,7 +241,7 @@ void Utente::setProductNotBoughtByName(const std::string ls,  const std::string 
     }
 }
 
-const bool& Utente::isProductBought(const std::string ls, const std::string product) const {
+const bool& Utente::isProductBought(const std::string& ls, const std::string& product) const {
     for (auto iter : listeSpesa){
         if (iter.getListName() == ls){
             return iter.getProductStatus(product);

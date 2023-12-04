@@ -12,57 +12,56 @@
 
 class Utente : public Observer{
 public:
-    Utente(std::string name, std::string surname) : userName(name), userSurname(surname) {
+    Utente(const std::string& name, const std::string& surname) : userName(name), userSurname(surname) {
         user = userName + " " + userSurname;
     }
 
     ~Utente() {};
 
-    ListaDellaSpesa& creaListaDellaSpesa(std::string name, std::string owner);
+    ListaDellaSpesa& creaListaDellaSpesa(const std::string& name, const std::string& owner);
 
     void addProductToList(ListaDellaSpesa& ls, Prodotto& p, int quantity = 1);
 
-    void addProductToListByName(std::string n, Prodotto& p, int quantity);
+    void addProductToListByName(const std::string& n, Prodotto& p, int quantity);
 
-    void removeProductFromListByName(std::string n, std::string prodcut);
+    void removeProductFromListByName(const std::string& n, const std::string& prodcut);
 
-    void reduceProductFromListByName(std::string n, std::string product, int quantity);
+    void reduceProductFromListByName(const std::string& n, const std::string& product, int quantity);
 
     void addNewList(ListaDellaSpesa& ls);
 
     void printOneShoppingList(const ListaDellaSpesa& ls) const;
 
-    void removeProductFromList(ListaDellaSpesa& ls, std::string product);
+    void removeProductFromList(ListaDellaSpesa& ls, const std::string& product);
 
-    void reduceProductQuantity(ListaDellaSpesa& ls, std::string product, int q);
+    void reduceProductQuantity(ListaDellaSpesa& ls, const std::string& product, int q);
 
     void getShoppingLists() const;
 
-    void setProductBought(ListaDellaSpesa& ls, std::string product);
+    void setProductBought(ListaDellaSpesa& ls, const std::string& product);
 
-    void setProductBoughtByName(std::string ls, std::string product);
+    void setProductBoughtByName(const std::string& ls, const std::string& product);
 
-    void setProductNotBought(ListaDellaSpesa& ls, std::string product);
+    void setProductNotBought(ListaDellaSpesa& ls, const std::string& product);
 
-    void setProductNotBoughtByName(std::string ls, std::string product);
-
+    void setProductNotBoughtByName(const std::string& ls, const std::string& product);
 
     void printAllShoppingLists() const;
 
-    const bool findList(std::string n) const;
+    bool findList(const std::string& n) const;
 
-    bool findProductInList(const ListaDellaSpesa& ls, std::string product);
+    bool findProductInList(const ListaDellaSpesa& ls, const std::string& product);
 
-    bool findProductInListByName(std::string n, std::string product);
+    bool findProductInListByName(const std::string& n, const std::string& product);
 
-    int getProductQuantityInList(std::string list, std::string product);
+    int getProductQuantityInList(const std::string& list, const std::string& product);
 
     void printAllShoopingListsName() const;
 
-    const bool& isProductBought(std::string ls, std::string product) const;
+    const bool& isProductBought(const std::string& ls, const std::string& product) const;
 
 
-    void update(Operazione operazione, std::string ls, Prodotto& p, std::string product, int quantity, bool state) override{
+    void update(Operazione operazione, std::string ls, Prodotto& p, const std::string& product, int quantity, bool state) override{
         switch(operazione) {
             case (Operazione::Aggiunta) :
                 addProductToListByName(ls, p, quantity);

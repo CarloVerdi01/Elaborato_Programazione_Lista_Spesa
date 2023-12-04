@@ -16,7 +16,7 @@
 
 class ListaDellaSpesa : public Subject{
 public:
-    ListaDellaSpesa(std::string name, std::string owner) : listName(name), userOwner(owner){}
+    ListaDellaSpesa(const std::string& name, const std::string& owner) : listName(name), userOwner(owner){}
 
     ~ListaDellaSpesa(){
         listaDellaSpesa.clear();
@@ -31,32 +31,32 @@ public:
 
     void addProduct(Prodotto& p, int quantity );
 
-    void removeProduct(std::string product);
+    void removeProduct(const std::string& product);
 
-    void reduceProductQuantity(std::string product, int q);
+    void reduceProductQuantity(const std::string& product, int q);
 
-    const std::list<std::string> findProductOfCategory(std::string category) const;
+    std::list<std::string> findProductOfCategory(const std::string& category) const;
 
-    const int getNumberOfProduct() const;
+    int getNumberOfProduct() const;
 
-    const int getNumberOfProductToBuy() const;
+    int getNumberOfProductToBuy() const;
 
-    const int getNumberOfPurchasedProduct() const;
+    int getNumberOfPurchasedProduct() const;
 
     void printList() const;
 
-    void shareList(Observer* o, std::string user);
+    void shareList(Observer* o, const std::string& user);
 
-    void setProductBought(std::string product);
+    void setProductBought(const std::string& product);
 
-    void setProductNotBought(std::string product);
+    void setProductNotBought(const std::string& product);
 
-    int getProductQuantity(std::string p);
+    int getProductQuantity(const std::string& p);
 
-    const bool isSharedUser(std::string u) const;
+    bool isSharedUser(const std::string& u) const;
 
 
-    void notify(Operazione operazioni, std::string ls, Prodotto& p, std::string product, int q , bool state) override{
+    void notify(Operazione operazioni, std::string ls, Prodotto& p, const std::string& product, int q , bool state) override{
         for (auto iter = observers.begin(); iter != observers.end(); ++iter){
             (*iter)->update(operazioni, ls, p, product, q , state);
         }
@@ -81,7 +81,7 @@ public:
     }
 
 
-    void setOwner(std::string o) {
+    void setOwner(const std::string& o) {
         userOwner = o;
     }
 
@@ -97,9 +97,9 @@ public:
         listName = n;
     }
 
-    bool findProduct(std::string product) const;
+    bool findProduct(const std::string& product) const;
 
-    bool getProductStatus(std::string product) const;
+    bool getProductStatus(const std::string& product) const;
 
 
 

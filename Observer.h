@@ -20,11 +20,7 @@ class Observer {
 public:
     virtual ~Observer() {};
 
-    //virtual void updateAdd(std::string ls, Prodotto& p, int q) = 0;
-    //virtual void updateRemove(std::string ls, std::string p) = 0;
-    //virtual void updateDecrement(std::string ls, std::string p, int q) = 0;
-
-    virtual void update(Operazione operazione, std::string ls, Prodotto& p, std::string product, int quantity, bool state) = 0;
+    virtual void update(Operazione operazione, std::string ls, Prodotto& p, const std::string& product, int quantity, bool state) = 0;
 
 
 
